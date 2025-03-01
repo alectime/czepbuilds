@@ -20,7 +20,7 @@ A modern, responsive portfolio website for czepbuilds.com built with React, Type
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/czepbuilds-portfolio.git
+   git clone git@github.com:alectime/czepbuilds.git
    cd czepbuilds-portfolio
    ```
 
@@ -68,6 +68,29 @@ This will generate optimized files in the `frontend/dist` directory.
    ```
    firebase deploy --only hosting
    ```
+
+## GitHub Repository
+
+This project is hosted on GitHub at: https://github.com/alectime/czepbuilds
+
+To contribute to this repository:
+
+```
+# Clone the repository
+git clone git@github.com:alectime/czepbuilds.git
+
+# Create a new branch for your feature
+git checkout -b feature/your-feature-name
+
+# Make your changes and commit them
+git add .
+git commit -m "Description of your changes"
+
+# Push your branch to GitHub
+git push origin feature/your-feature-name
+
+# Create a pull request on GitHub
+```
 
 ## Future Enhancements
 
