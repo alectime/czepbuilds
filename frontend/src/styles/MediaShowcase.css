@@ -1,6 +1,6 @@
 .media-showcase {
   padding: 80px 0;
-  background-color: #f9f9f9;
+  background-color: var(--color-background);
   min-height: 80vh; /* Ensure page has some height even when empty */
 }
 
@@ -21,13 +21,14 @@
 .showcase-section h2 {
   font-size: 32px;
   margin-bottom: 8px;
-  color: #333;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .showcase-section p {
   font-size: 18px;
-  color: #666;
+  color: var(--color-text);
+  opacity: 0.8;
   margin-bottom: 32px;
   max-width: 700px;
 }

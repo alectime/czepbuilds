@@ -1,0 +1,22 @@
+:root {
+  /* Color Palette */
+  --color-black: #080806;
+  --color-green: #123524;
+  --color-beige: #d5b48c; /* Corrected from #dsb48c which appears to be a typo */
+  --color-off-white: #f7f7f2;
+  --color-orange: #fd801d;
+
+  /* Functional Colors */
+  --color-background: var(--color-off-white);
+  --color-background-dark: var(--color-black);
+  --color-text: var(--color-black);
+  --color-text-light: var(--color-off-white);
+  --color-primary: var(--color-green);
+  --color-secondary: var(--color-beige);
+  --color-accent: var(--color-orange);
+  
+  /* Other Variables */
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(8, 8, 6, 0.1);
+  --transition-speed: 0.3s;
+} 
