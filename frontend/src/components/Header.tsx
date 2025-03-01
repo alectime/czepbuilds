@@ -1,18 +1,34 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Header.css';
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header className="header">
       <div className="container">
         <div className="logo">
-          <h1>Czep Builds</h1>
+          <Link to="/">Czep Builds</Link>
         </div>
-        <nav className="nav">
+        <button 
+          className="mobile-menu-button" 
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          {isMenuOpen ? '✕' : '☰'}
+        </button>
+        <nav className={`nav ${isMenuOpen ? 'active' : ''}`}>
           <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
+            <li><Link to="/#projects" onClick={() => setIsMenuOpen(false)}>Projects</Link></li>
+            <li><Link to="/media" onClick={() => setIsMenuOpen(false)}>Media</Link></li>
+            <li><a href="#about" onClick={() => setIsMenuOpen(false)}>About</a></li>
+            <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
           </ul>
         </nav>
       </div>
