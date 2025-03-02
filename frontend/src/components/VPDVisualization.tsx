@@ -5,6 +5,7 @@ interface VPDVisualizationProps {
   airTemp: number;
   humidity: number;
   tempUnit: 'F' | 'C';
+  onChartClick?: (newTemp: number, newHumidity: number) => void;
 }
 
 /**
@@ -24,7 +25,8 @@ interface VPDVisualizationProps {
 const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   airTemp,
   humidity,
-  tempUnit
+  tempUnit,
+  onChartClick
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,6 +45,46 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   const tempRangeC = {
     min: 0,
     max: 50
+  };
+
+  // Handle click on the chart
+  const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!onChartClick || !canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const chartWidth = dimensions.width - margin.left - margin.right;
+    const chartHeight = dimensions.height - margin.top - margin.bottom;
+
+    // Check if click is within chart area
+    if (
+      x < margin.left || 
+      x > dimensions.width - margin.right || 
+      y < margin.top || 
+      y > dimensions.height - margin.bottom
+    ) {
+      return;
+    }
+
+    // Convert click position to humidity (x-axis, flipped)
+    // 100% on left, 0% on right
+    const newHumidity = Math.round(100 - ((x - margin.left) / chartWidth) * 100);
+    
+    // Convert click position to temperature (y-axis, flipped)
+    // Low temp at top, high temp at bottom
+    const tempRange = tempUnit === 'F' ? tempRangeF : tempRangeC;
+    const tempSpan = tempRange.max - tempRange.min;
+    const newTemp = Math.round(tempRange.min + ((y - margin.top) / chartHeight) * tempSpan);
+
+    // Clamp values to valid ranges
+    const clampedHumidity = Math.max(0, Math.min(100, newHumidity));
+    const clampedTemp = Math.max(tempRange.min, Math.min(tempRange.max, newTemp));
+
+    // Call the callback with the new values
+    onChartClick(clampedTemp, clampedHumidity);
   };
 
   // Update dimensions when window resizes
@@ -249,13 +291,17 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.lineWidth = 2;
     ctx.stroke();
 
-  }, [airTemp, humidity, tempUnit, dimensions]);
+    // Add cursor style to indicate clickable area
+    canvas.style.cursor = onChartClick ? 'pointer' : 'default';
+
+  }, [airTemp, humidity, tempUnit, dimensions, onChartClick]);
 
   return (
     <div ref={containerRef} className="vpd-chart">
       <h1>VPD Chart</h1>
       <canvas 
         ref={canvasRef}
+        onClick={handleCanvasClick}
         style={{
           display: 'block',
           marginBottom: '20px'

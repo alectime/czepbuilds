@@ -19,6 +19,12 @@ const VPDCalculator: React.FC = () => {
     setTempUnit(unit);
   };
 
+  // Handle chart click to update temperature and humidity
+  const handleChartClick = (newTemp: number, newHumidity: number) => {
+    setAirTemp(newTemp);
+    setHumidity(newHumidity);
+  };
+
   // Calculate current VPD
   const currentVpd = calculateVPD(
     tempUnit === 'F' ? (airTemp - 32) * (5 / 9) : airTemp,
@@ -42,7 +48,9 @@ const VPDCalculator: React.FC = () => {
             airTemp={airTemp}
             humidity={humidity}
             tempUnit={tempUnit}
+            onChartClick={handleChartClick}
           />
+          <p className="chart-instruction">Click anywhere on the chart to set temperature and humidity values</p>
         </div>
         
         <div className="calculator-form">
