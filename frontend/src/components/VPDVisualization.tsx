@@ -30,7 +30,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 600, height: 500 });
+  const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
   const margin = { top: 30, right: 20, bottom: 20, left: 40 };
 
   // Convert Fahrenheit to Celsius
@@ -97,12 +97,17 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         // Make the chart take up the full container width with a minimum size
         const width = Math.max(containerWidth, 350);
         
-        // If in horizontal layout (side by side with controls), use container height
-        // Otherwise use an aspect ratio based on width
+        // For desktop (wide screens), ensure the chart is square
         const isWideScreen = window.innerWidth > 900;
-        const height = isWideScreen 
-          ? Math.max(containerHeight - 20, 350) // Subtract padding
-          : Math.max(Math.floor(width * 0.85), 350); // Taller aspect ratio for more vertical space
+        let height;
+        
+        if (isWideScreen) {
+          // On desktop, make height equal to width for a square aspect ratio
+          height = width;
+        } else {
+          // On mobile, use a taller aspect ratio for more vertical space
+          height = Math.max(Math.floor(width * 0.85), 350);
+        }
         
         setDimensions({ width, height });
       }

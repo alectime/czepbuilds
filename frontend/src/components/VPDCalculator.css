@@ -17,7 +17,9 @@
 .chart-container {
   flex: 4; /* Increased from 3 to 4 to give more space to the chart */
   min-width: 350px;
-  height: 100%; /* Take full height of parent */
+  position: relative;
+  aspect-ratio: 1/1; /* Force a square aspect ratio */
+  max-height: 700px; /* Prevent it from getting too large on very wide screens */
   display: flex;
   flex-direction: column;
 }
@@ -144,8 +146,8 @@
   .chart-container {
     width: 100%;
     max-width: 700px;
-    height: auto; /* Allow height to be determined by content */
-    min-height: 400px; /* Minimum height for the chart on mobile */
+    aspect-ratio: 1/1; /* Maintain square aspect ratio on mobile */
+    min-height: 350px; /* Minimum height for the chart on mobile */
   }
   
   .controls-container {
