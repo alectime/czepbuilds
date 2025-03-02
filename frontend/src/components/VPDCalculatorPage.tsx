@@ -42,11 +42,11 @@ const VPDCalculatorPage: React.FC = () => {
             <div className="calculator-notes">
               <h3>VPD Ranges</h3>
               <ul>
-                <li><span className="color-dot" style={{backgroundColor: '#e74c3c'}}></span> 0.0-0.4 kPa: Too low, high disease risk</li>
-                <li><span className="color-dot" style={{backgroundColor: '#2ecc71'}}></span> 0.4-0.8 kPa: Ideal for clones and young plants</li>
-                <li><span className="color-dot" style={{backgroundColor: '#f1c40f'}}></span> 0.8-1.2 kPa: Ideal for vegetative growth</li>
-                <li><span className="color-dot" style={{backgroundColor: '#e67e22'}}></span> 1.2-1.6 kPa: Ideal for flowering/fruiting</li>
-                <li><span className="color-dot" style={{backgroundColor: '#e74c3c'}}></span> 1.6-2.0 kPa: High, may cause plant stress</li>
+                <li><span className="color-dot" style={{backgroundColor: '#785673'}}></span> 0.0-0.4 kPa: Danger Zone (Under Transpiration)</li>
+                <li><span className="color-dot" style={{backgroundColor: '#a3b03a'}}></span> 0.4-0.8 kPa: Early Vegetative Growth / Propagation (Low Transpiration)</li>
+                <li><span className="color-dot" style={{backgroundColor: '#578735'}}></span> 0.8-1.2 kPa: Late Vegetative / Early Flower (Healthy Transpiration)</li>
+                <li><span className="color-dot" style={{backgroundColor: '#f4bb4a'}}></span> 1.2-1.6 kPa: Mid / Late Flower (High Transpiration)</li>
+                <li><span className="color-dot" style={{backgroundColor: '#4e8cd6'}}></span> 1.6-2.0 kPa: Danger Zone (Over Transpiration)</li>
               </ul>
               
               <h3>Important Notes</h3>

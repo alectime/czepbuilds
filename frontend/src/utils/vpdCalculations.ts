@@ -86,11 +86,11 @@ export function isLeafTempUnderDewPoint(leafTempC: number, dewPointC: number): b
  * Define VPD zones with their respective colors and labels
  */
 export const vpdZones = [
-  { min: 0.0, max: 0.4, color: 'rgba(255, 0, 0, 0.5)', label: 'Under Transpiration (Danger)' },
-  { min: 0.4, max: 0.8, color: 'rgba(255, 255, 0, 0.5)', label: 'Early Veg Growth / Propagation' },
-  { min: 0.8, max: 1.2, color: 'rgba(0, 255, 0, 0.5)', label: 'Late Veg / Early Flower (Healthy)' },
-  { min: 1.2, max: 1.6, color: 'rgba(255, 165, 0, 0.5)', label: 'Mid / Late Flower' },
-  { min: 1.6, max: 2.0, color: 'rgba(255, 0, 0, 0.5)', label: 'Over Transpiration (Danger)' }
+  { min: 0.0, max: 0.4, color: 'rgba(120, 86, 115, 0.5)', label: 'Danger Zone (Under Transpiration)' },
+  { min: 0.4, max: 0.8, color: 'rgba(163, 176, 58, 0.5)', label: 'Early Vegetative Growth / Propagation (Low Transpiration)' },
+  { min: 0.8, max: 1.2, color: 'rgba(87, 135, 53, 0.5)', label: 'Late Vegetative / Early Flower (Healthy Transpiration)' },
+  { min: 1.2, max: 1.6, color: 'rgba(244, 187, 74, 0.5)', label: 'Mid / Late Flower (High Transpiration)' },
+  { min: 1.6, max: 2.0, color: 'rgba(78, 140, 214, 0.5)', label: 'Danger Zone (Over Transpiration)' }
 ];
 
 /**
@@ -101,28 +101,28 @@ export const vpdZones = [
 export function getVpdRecommendation(vpd: number): { text: string; color: string } {
   if (vpd < 0.4) {
     return {
-      text: 'Warning: VPD too low. Risk of condensation and fungal diseases.',
-      color: '#e74c3c' // red
+      text: 'Warning: VPD too low. Danger Zone (Under Transpiration).',
+      color: '#785673' // purple
     };
   } else if (vpd >= 0.4 && vpd < 0.8) {
     return {
-      text: 'Ideal for early vegetative growth and propagation.',
-      color: '#2ecc71' // green
+      text: 'Early Vegetative Growth / Propagation (Low Transpiration).',
+      color: '#a3b03a' // lime green
     };
   } else if (vpd >= 0.8 && vpd < 1.2) {
     return {
-      text: 'Ideal for late vegetative and early flowering stages.',
-      color: '#f1c40f' // yellow
+      text: 'Late Vegetative / Early Flower (Healthy Transpiration).',
+      color: '#578735' // green
     };
   } else if (vpd >= 1.2 && vpd < 1.6) {
     return {
-      text: 'Suitable for mid to late flowering stages.',
-      color: '#e67e22' // orange
+      text: 'Mid / Late Flower (High Transpiration).',
+      color: '#f4bb4a' // orange/yellow
     };
   } else {
     return {
-      text: 'Warning: VPD too high. Plant may experience excessive water loss and stress.',
-      color: '#e74c3c' // red
+      text: 'Warning: VPD too high. Danger Zone (Over Transpiration).',
+      color: '#4e8cd6' // blue
     };
   }
 } 

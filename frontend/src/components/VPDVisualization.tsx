@@ -144,14 +144,16 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         const vpd = calculateVPD(tempC, h);
         
         // Set color based on VPD value
-        let color = 'rgba(231, 76, 60, 0.5)'; // Default red for danger
+        let color = 'rgba(120, 86, 115, 0.5)'; // Purple for under transpiration danger
          
         if (vpd >= 0.4 && vpd < 0.8) {
-          color = 'rgba(46, 204, 113, 0.5)'; // Green for clones/early veg
+          color = 'rgba(163, 176, 58, 0.5)'; // Lime green for early veg
         } else if (vpd >= 0.8 && vpd < 1.2) {
-          color = 'rgba(241, 196, 15, 0.5)'; // Yellow for late veg
+          color = 'rgba(87, 135, 53, 0.5)'; // Green for late veg/early flower
         } else if (vpd >= 1.2 && vpd < 1.6) {
-          color = 'rgba(230, 126, 34, 0.5)'; // Orange for flowering
+          color = 'rgba(244, 187, 74, 0.5)'; // Orange/yellow for mid/late flower
+        } else if (vpd >= 1.6) {
+          color = 'rgba(78, 140, 214, 0.5)'; // Blue for over transpiration danger
         }
 
         // Draw pixel with proper scaling

@@ -28,11 +28,11 @@ const VPDCalculator: React.FC = () => {
   // Determine VPD range for visual indication
   let vpdClass = '';
   const vpdValue = parseFloat(currentVpd);
-  if (vpdValue < 0.4) vpdClass = 'vpd-low';
+  if (vpdValue < 0.4) vpdClass = 'vpd-under-transpiration';
   else if (vpdValue < 0.8) vpdClass = 'vpd-early-veg';
   else if (vpdValue < 1.2) vpdClass = 'vpd-late-veg';
   else if (vpdValue < 1.6) vpdClass = 'vpd-flower';
-  else vpdClass = 'vpd-high';
+  else vpdClass = 'vpd-over-transpiration';
 
   return (
     <div className="calculator-container">
@@ -92,11 +92,11 @@ const VPDCalculator: React.FC = () => {
               {currentVpd} kPa
             </div>
             <div className="vpd-range-indicator">
-              {vpdValue < 0.4 && "Too low - disease risk"}
-              {vpdValue >= 0.4 && vpdValue < 0.8 && "Good for clones/seedlings"}
-              {vpdValue >= 0.8 && vpdValue < 1.2 && "Ideal for vegetative growth"}
-              {vpdValue >= 1.2 && vpdValue < 1.6 && "Ideal for flowering/fruiting"}
-              {vpdValue >= 1.6 && "Too high - plant stress risk"}
+              {vpdValue < 0.4 && "Danger Zone (Under Transpiration)"}
+              {vpdValue >= 0.4 && vpdValue < 0.8 && "Early Vegetative Growth / Propagation (Low Transpiration)"}
+              {vpdValue >= 0.8 && vpdValue < 1.2 && "Late Vegetative / Early Flower (Healthy Transpiration)"}
+              {vpdValue >= 1.2 && vpdValue < 1.6 && "Mid / Late Flower (High Transpiration)"}
+              {vpdValue >= 1.6 && "Danger Zone (Over Transpiration)"}
             </div>
           </div>
         </div>
