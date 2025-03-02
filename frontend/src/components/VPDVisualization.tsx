@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { calculateVPD } from '../utils/vpdCalculations';
+import { calculateVPD, calculateDewPoint } from '../utils/vpdCalculations';
 
 interface VPDVisualizationProps {
   airTemp: number;
@@ -29,7 +29,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 600, height: 500 });
-  const margin = { top: 60, right: 50, bottom: 50, left: 70 };
+  const margin = { top: 40, right: 30, bottom: 40, left: 50 };
 
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
@@ -92,6 +92,11 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 
     const chartWidth = dimensions.width - margin.left - margin.right;
     const chartHeight = dimensions.height - margin.top - margin.bottom;
+
+    // Calculate font size based on chart dimensions
+    const baseFontSize = Math.max(10, Math.min(14, dimensions.width / 40));
+    const labelFontSize = `${baseFontSize}px Arial`;
+    const titleFontSize = `bold ${Math.max(12, Math.min(16, dimensions.width / 30))}px Arial`;
 
     // Clear canvas
     ctx.clearRect(0, 0, dimensions.width, dimensions.height);
@@ -158,6 +163,46 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       }
     }
 
+    // Draw dew point line
+    ctx.strokeStyle = 'rgba(255, 140, 0, 0.9)'; // Orange for dew point (danger)
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    // Calculate and draw dew point line
+    for (let h = 0; h <= 100; h += 1) {
+      // For each humidity value, calculate the corresponding dew point
+      // We'll use a reference temperature (middle of our range) to calculate dew point
+      const referenceTemp = tempUnit === 'F' ? 77 : 25; // 77°F or 25°C
+      const referenceTempC = tempUnit === 'F' ? fahrenheitToCelsius(referenceTemp) : referenceTemp;
+      
+      // Calculate dew point in Celsius
+      const dewPointC = calculateDewPoint(referenceTempC, h);
+      
+      // Convert back to the current unit if needed
+      const dewPoint = tempUnit === 'F' ? (dewPointC * 9/5) + 32 : dewPointC;
+      
+      // Only draw if the dew point is within our temperature range
+      if (dewPoint >= tempRange.min && dewPoint <= tempRange.max) {
+        // Flipped X-axis (humidity): 100% on left, 0% on right
+        const x = margin.left + ((100 - h) / 100) * chartWidth;
+        // Flipped Y-axis (temperature): Low temp at top, high temp at bottom
+        const y = margin.top + ((dewPoint - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+        
+        if (h === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+    }
+    ctx.stroke();
+
+    // Add dew point label
+    ctx.font = titleFontSize;
+    ctx.fillStyle = 'rgba(255, 140, 0, 0.9)';
+    ctx.textAlign = 'right';
+    ctx.fillText('Dew Point', dimensions.width - margin.right - 10, margin.top + 25);
+
     // Draw border
     ctx.strokeStyle = '#ccc';
     ctx.lineWidth = 1;
@@ -177,16 +222,16 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.lineTo(dimensions.width - margin.right, margin.top);
     ctx.stroke();
 
-    // Add labels
-    ctx.fillStyle = '#333';
-    ctx.font = '14px Arial';
-    ctx.textAlign = 'right';
-
+    // Add labels - now inside the chart with white text
+    ctx.font = labelFontSize;
+    
     // Temperature labels (Y-axis) - FLIPPED: Low temp at top, high temp at bottom
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
     for (let t = tempRange.min; t <= tempRange.max; t += tempStep) {
       // Flip the temperature axis (low temp at top)
       const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
-      ctx.fillText(`${t}°${tempUnit}`, margin.left - 10, y + 4);
+      ctx.fillText(`${t}°${tempUnit}`, margin.left + 5, y + 4);
     }
 
     // Humidity labels (X-axis) - FLIPPED: 100% on left, 0% on right
@@ -194,21 +239,22 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     for (let h = 0; h <= 100; h += 10) {
       // Flip the humidity axis (100% on left)
       const x = margin.left + ((100 - h) / 100) * chartWidth;
-      ctx.fillText(`${h}%`, x, margin.top - 10);
+      ctx.fillText(`${h}%`, x, margin.top + 15);
     }
 
-    // Axis titles
+    // Axis titles - keep outside the chart
+    ctx.fillStyle = '#333';
     ctx.save();
-    ctx.translate(20, dimensions.height/2);
+    ctx.translate(15, dimensions.height/2);
     ctx.rotate(-Math.PI/2);
     ctx.textAlign = 'center';
-    ctx.font = 'bold 16px Arial';
+    ctx.font = titleFontSize;
     ctx.fillText(`Air Temperature (°${tempUnit})`, 0, 0);
     ctx.restore();
 
     ctx.textAlign = 'center';
-    ctx.font = 'bold 16px Arial';
-    ctx.fillText('Relative Humidity (%)', dimensions.width/2, margin.top - 30);
+    ctx.font = titleFontSize;
+    ctx.fillText('Relative Humidity (%)', dimensions.width/2, margin.top - 15);
 
     // Draw current point
     // Flipped X-axis (humidity): 100% on left, 0% on right
@@ -230,6 +276,16 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
     ctx.stroke();
+
+    // Calculate and display current dew point
+    const currentTempC = tempUnit === 'F' ? fahrenheitToCelsius(airTemp) : airTemp;
+    const currentDewPointC = calculateDewPoint(currentTempC, humidity);
+    const currentDewPoint = tempUnit === 'F' ? (currentDewPointC * 9/5) + 32 : currentDewPointC;
+    
+    ctx.font = labelFontSize;
+    ctx.fillStyle = 'rgba(255, 140, 0, 0.9)';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Current Dew Point: ${currentDewPoint.toFixed(1)}°${tempUnit}`, margin.left, dimensions.height - margin.bottom + 25);
 
   }, [airTemp, humidity, tempUnit, dimensions]);
 
