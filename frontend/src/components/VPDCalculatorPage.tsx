@@ -30,37 +30,6 @@ const VPDCalculatorPage: React.FC = () => {
       <div className="project-content">
         <div className="container">
           <section className="project-section">
-            <h2>How It Works</h2>
-            <p>
-              This calculator uses the following formulas:
-            </p>
-            <ul>
-              <li>
-                <strong>Saturation Vapor Pressure (SVP):</strong> 
-                0.6108 × exp((17.27 × tempC) / (tempC + 237.3)) kPa
-              </li>
-              <li>
-                <strong>Actual Vapor Pressure (AVP):</strong> 
-                SVP × (relativeHumidity / 100) kPa
-              </li>
-              <li>
-                <strong>Vapor Pressure Deficit (VPD):</strong> 
-                SVP - AVP kPa
-              </li>
-            </ul>
-            <p>
-              The visualization color-codes different VPD ranges:
-            </p>
-            <ul>
-              <li><span className="color-dot" style={{backgroundColor: '#e74c3c'}}></span> 0.0-0.4 kPa: Too low, high disease risk</li>
-              <li><span className="color-dot" style={{backgroundColor: '#2ecc71'}}></span> 0.4-0.8 kPa: Ideal for clones and young plants</li>
-              <li><span className="color-dot" style={{backgroundColor: '#f1c40f'}}></span> 0.8-1.2 kPa: Ideal for vegetative growth</li>
-              <li><span className="color-dot" style={{backgroundColor: '#e67e22'}}></span> 1.2-1.6 kPa: Ideal for flowering/fruiting</li>
-              <li><span className="color-dot" style={{backgroundColor: '#e74c3c'}}></span> 1.6-2.0 kPa: High, may cause plant stress</li>
-            </ul>
-          </section>
-
-          <section className="project-section">
             <h2>The Calculator</h2>
             <p>
               Use the calculator below to determine the VPD based on air temperature, 
@@ -75,6 +44,15 @@ const VPDCalculatorPage: React.FC = () => {
             </div>
             
             <div className="calculator-notes">
+              <h3>VPD Ranges</h3>
+              <ul>
+                <li><span className="color-dot" style={{backgroundColor: '#e74c3c'}}></span> 0.0-0.4 kPa: Too low, high disease risk</li>
+                <li><span className="color-dot" style={{backgroundColor: '#2ecc71'}}></span> 0.4-0.8 kPa: Ideal for clones and young plants</li>
+                <li><span className="color-dot" style={{backgroundColor: '#f1c40f'}}></span> 0.8-1.2 kPa: Ideal for vegetative growth</li>
+                <li><span className="color-dot" style={{backgroundColor: '#e67e22'}}></span> 1.2-1.6 kPa: Ideal for flowering/fruiting</li>
+                <li><span className="color-dot" style={{backgroundColor: '#e74c3c'}}></span> 1.6-2.0 kPa: High, may cause plant stress</li>
+              </ul>
+              
               <h3>Important Notes</h3>
               <ul>
                 <li>

@@ -330,6 +330,27 @@
   padding: 1.5rem;
   background-color: #f8f9fa;
   border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-notes h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+.calculator-notes ul {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.calculator-notes li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.calculator-notes li:last-child {
+  margin-bottom: 0;
 }
 
 .color-dot {
