@@ -303,7 +303,6 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 
   return (
     <div ref={containerRef} className="vpd-chart">
-      <h1>VPD Chart</h1>
       <canvas 
         ref={canvasRef}
         onClick={handleCanvasClick}
