@@ -7,6 +7,20 @@ interface VPDVisualizationProps {
   tempUnit: 'F' | 'C';
 }
 
+/**
+ * VPD Visualization Chart Component
+ * 
+ * IMPORTANT AXIS ORIENTATION RULE:
+ * This chart must maintain the following axis orientation:
+ * 1. Humidity (X-axis): 100% on the LEFT, 0% on the RIGHT, positioned at the TOP of the chart
+ * 2. Temperature (Y-axis): Low temperatures at the TOP, high temperatures at the BOTTOM
+ * 
+ * While visual styling (colors, fonts, margins, etc.) can be modified,
+ * the orientation of these axes must be preserved for consistency and usability.
+ * 
+ * Any future modifications should respect this orientation to maintain
+ * the expected behavior of the VPD visualization.
+ */
 const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   airTemp,
   humidity,
