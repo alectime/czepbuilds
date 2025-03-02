@@ -35,15 +35,25 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
-        const width = containerRef.current.clientWidth;
-        const height = Math.min(width, window.innerHeight * 0.8); // Cap height at 80% of viewport height
-        setDimensions({ width, height });
+        const containerWidth = containerRef.current.clientWidth;
+        // Use the smaller of the container width or a maximum width to maintain aspect ratio
+        const size = Math.min(containerWidth, 800);
+        setDimensions({ width: size, height: size });
       }
     };
 
     updateDimensions();
+    
+    // Add a small delay to ensure container dimensions are correct after layout changes
+    const resizeTimer = setTimeout(updateDimensions, 100);
+    
+    // Add resize event listener
     window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
+    
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+      clearTimeout(resizeTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -57,6 +67,8 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const dpr = window.devicePixelRatio || 1;
     canvas.width = dimensions.width * dpr;
     canvas.height = dimensions.height * dpr;
+    
+    // Apply scaling
     ctx.scale(dpr, dpr);
 
     // Set canvas CSS dimensions
@@ -86,7 +98,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const tempStep = tempUnit === 'F' ? 10 : 5;
     const tempRange = tempUnit === 'F' ? tempRangeF : tempRangeC;
     for (let t = tempRange.min; t <= tempRange.max; t += tempStep) {
-      const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+      const y = dimensions.height - margin.bottom - ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
       ctx.beginPath();
       ctx.moveTo(margin.left, y);
       ctx.lineTo(dimensions.width - margin.right, y);
@@ -97,24 +109,29 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     for (let t = tempRange.min; t <= tempRange.max; t += 1) {
       for (let h = 0; h <= 100; h += 1) {
         const x = margin.left + (h / 100) * chartWidth;
-        const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+        const y = dimensions.height - margin.bottom - ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
         
         // Calculate VPD
         const tempC = tempUnit === 'F' ? fahrenheitToCelsius(t) : t;
         const vpd = calculateVPD(tempC, h);
         
         // Set color based on VPD value
-        let color = 'rgba(255, 0, 0, 0.3)'; // Default red for danger
+        let color = 'rgba(231, 76, 60, 0.5)'; // Default red for danger
+        
         if (vpd >= 0.4 && vpd < 0.8) {
-          color = 'rgba(255, 255, 0, 0.3)'; // Yellow for early veg
+          color = 'rgba(46, 204, 113, 0.5)'; // Green for clones/early veg
         } else if (vpd >= 0.8 && vpd < 1.2) {
-          color = 'rgba(0, 255, 0, 0.3)'; // Green for late veg/early flower
+          color = 'rgba(241, 196, 15, 0.5)'; // Yellow for late veg
         } else if (vpd >= 1.2 && vpd < 1.6) {
-          color = 'rgba(255, 165, 0, 0.3)'; // Orange for mid/late flower
+          color = 'rgba(230, 126, 34, 0.5)'; // Orange for flowering
         }
 
+        // Draw pixel with proper scaling
+        const pixelWidth = Math.max(1, chartWidth/100);
+        const pixelHeight = Math.max(1, chartHeight/(tempRange.max - tempRange.min));
+        
         ctx.fillStyle = color;
-        ctx.fillRect(x, y, chartWidth/100, chartHeight/(tempRange.max - tempRange.min));
+        ctx.fillRect(x, y - pixelHeight, pixelWidth, pixelHeight);
       }
     }
 
@@ -128,8 +145,8 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.lineTo(margin.left, dimensions.height - margin.bottom);
     
     // X-axis (humidity)
-    ctx.moveTo(margin.left, margin.top);
-    ctx.lineTo(dimensions.width - margin.right, margin.top);
+    ctx.moveTo(margin.left, dimensions.height - margin.bottom);
+    ctx.lineTo(dimensions.width - margin.right, dimensions.height - margin.bottom);
     ctx.stroke();
 
     // Add labels
@@ -139,7 +156,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 
     // Temperature labels (Y-axis)
     for (let t = tempRange.min; t <= tempRange.max; t += tempStep) {
-      const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+      const y = dimensions.height - margin.bottom - ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
       ctx.fillText(`${t}°${tempUnit}`, margin.left - 10, y + 4);
     }
 
@@ -147,7 +164,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.textAlign = 'center';
     for (let h = 0; h <= 100; h += 10) {
       const x = margin.left + (h / 100) * chartWidth;
-      ctx.fillText(`${h}%`, x, margin.top - 10);
+      ctx.fillText(`${h}%`, x, dimensions.height - margin.bottom + 20);
     }
 
     // Axis titles
@@ -158,11 +175,12 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.fillText(`Air Temperature (°${tempUnit})`, 0, 0);
     ctx.restore();
 
-    ctx.fillText('Relative Humidity (%)', dimensions.width/2, 30);
+    ctx.textAlign = 'center';
+    ctx.fillText('Relative Humidity (%)', dimensions.width/2, dimensions.height - 10);
 
     // Draw current point
     const currentX = margin.left + (humidity / 100) * chartWidth;
-    const currentY = margin.top + ((airTemp - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+    const currentY = dimensions.height - margin.bottom - ((airTemp - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
 
     ctx.beginPath();
     ctx.arc(currentX, currentY, 6, 0, Math.PI * 2);

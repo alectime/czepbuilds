@@ -266,7 +266,7 @@
 /* VPD Calculator Container */
 .calculator-container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -285,12 +285,16 @@
   flex: 1;
   min-width: 0;
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .vpd-chart {
   width: 100%;
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
+  aspect-ratio: 1 / 1;
+  position: relative;
 }
 
 .vpd-chart h1 {
@@ -301,12 +305,14 @@
 
 .vpd-chart canvas {
   max-width: 100%;
-  height: auto;
+  object-fit: contain;
+  display: block;
   margin: 0 auto;
 }
 
 .calculator-form {
-  width: 300px;
+  width: 350px;
+  flex-shrink: 0;
   padding: 1.5rem;
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -370,24 +376,75 @@
   border-color: #0056b3;
 }
 
+/* VPD Result Styling */
 .vpd-result {
   margin-top: 2rem;
   padding: 1rem;
-  background: #e9ecef;
-  border-radius: 4px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #6c757d;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+.vpd-low {
+  border-left-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.vpd-early-veg {
+  border-left-color: #2ecc71;
+  background-color: rgba(46, 204, 113, 0.1);
+}
+
+.vpd-late-veg {
+  border-left-color: #f1c40f;
+  background-color: rgba(241, 196, 15, 0.1);
+}
+
+.vpd-flower {
+  border-left-color: #e67e22;
+  background-color: rgba(230, 126, 34, 0.1);
+}
+
+.vpd-high {
+  border-left-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
 }
 
 .vpd-result label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
+  color: #333;
 }
 
 .vpd-value {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: #007bff;
+  margin-bottom: 0.5rem;
+}
+
+.vpd-range-indicator {
+  font-size: 0.9rem;
+  color: #555;
+  font-style: italic;
+}
+
+/* Media query for very large screens */
+@media (min-width: 1600px) {
+  .calculator-container {
+    max-width: 1400px;
+  }
+  
+  .vpd-chart {
+    max-width: 900px;
+  }
+  
+  .calculator-form {
+    width: 400px;
+  }
 }
 
 /* Responsive styles for calculator */
@@ -397,7 +454,11 @@
   }
 
   .vpd-chart {
-    max-width: 700px;
+    max-width: 650px;
+  }
+  
+  .calculator-form {
+    width: 320px;
   }
 }
 
@@ -422,6 +483,10 @@
     width: 100%;
     max-width: 500px;
     position: static;
+  }
+
+  .vpd-chart {
+    max-width: 700px;
   }
 
   .vpd-chart h1 {

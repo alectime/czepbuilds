@@ -22,6 +22,21 @@ const VPDCalculator: React.FC = () => {
     setTempUnit(unit);
   };
 
+  // Calculate current VPD
+  const currentVpd = calculateVPD(
+    tempUnit === 'F' ? (airTemp - 32) * (5 / 9) : airTemp,
+    humidity
+  ).toFixed(2);
+
+  // Determine VPD range for visual indication
+  let vpdClass = '';
+  const vpdValue = parseFloat(currentVpd);
+  if (vpdValue < 0.4) vpdClass = 'vpd-low';
+  else if (vpdValue < 0.8) vpdClass = 'vpd-early-veg';
+  else if (vpdValue < 1.2) vpdClass = 'vpd-late-veg';
+  else if (vpdValue < 1.6) vpdClass = 'vpd-flower';
+  else vpdClass = 'vpd-high';
+
   return (
     <div className="calculator-container">
       <div className="calculator-layout">
@@ -85,13 +100,17 @@ const VPDCalculator: React.FC = () => {
             />
           </div>
 
-          <div className="vpd-result">
+          <div className={`vpd-result ${vpdClass}`}>
             <label>Current VPD:</label>
             <div className="vpd-value">
-              {calculateVPD(
-                tempUnit === 'F' ? (airTemp - 32) * (5 / 9) : airTemp,
-                humidity
-              ).toFixed(2)} kPa
+              {currentVpd} kPa
+            </div>
+            <div className="vpd-range-indicator">
+              {vpdValue < 0.4 && "Too low - disease risk"}
+              {vpdValue >= 0.4 && vpdValue < 0.8 && "Good for clones/seedlings"}
+              {vpdValue >= 0.8 && vpdValue < 1.2 && "Ideal for vegetative growth"}
+              {vpdValue >= 1.2 && vpdValue < 1.6 && "Ideal for flowering/fruiting"}
+              {vpdValue >= 1.6 && "Too high - plant stress risk"}
             </div>
           </div>
         </div>
