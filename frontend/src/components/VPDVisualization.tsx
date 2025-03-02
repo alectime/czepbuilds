@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { calculateVPD } from '../utils/vpdCalculations';
 
 interface VPDVisualizationProps {
@@ -13,11 +13,9 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   tempUnit
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const width = 600;
-  const height = 600;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
   const margin = { top: 50, right: 50, bottom: 50, left: 60 };
-  const chartWidth = width - margin.left - margin.right;
-  const chartHeight = height - margin.top - margin.bottom;
 
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
@@ -33,6 +31,21 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     max: 50
   };
 
+  // Update dimensions when window resizes
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.clientWidth;
+        const height = Math.min(width, window.innerHeight * 0.8); // Cap height at 80% of viewport height
+        setDimensions({ width, height });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -42,12 +55,19 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 
     // Set canvas dimensions with device pixel ratio for sharp rendering
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    canvas.width = dimensions.width * dpr;
+    canvas.height = dimensions.height * dpr;
     ctx.scale(dpr, dpr);
 
+    // Set canvas CSS dimensions
+    canvas.style.width = `${dimensions.width}px`;
+    canvas.style.height = `${dimensions.height}px`;
+
+    const chartWidth = dimensions.width - margin.left - margin.right;
+    const chartHeight = dimensions.height - margin.top - margin.bottom;
+
     // Clear canvas
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, dimensions.width, dimensions.height);
 
     // Draw background grid
     ctx.strokeStyle = '#e0e0e0';
@@ -58,7 +78,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       const x = margin.left + (h / 100) * chartWidth;
       ctx.beginPath();
       ctx.moveTo(x, margin.top);
-      ctx.lineTo(x, height - margin.bottom);
+      ctx.lineTo(x, dimensions.height - margin.bottom);
       ctx.stroke();
     }
 
@@ -69,7 +89,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
       ctx.beginPath();
       ctx.moveTo(margin.left, y);
-      ctx.lineTo(width - margin.right, y);
+      ctx.lineTo(dimensions.width - margin.right, y);
       ctx.stroke();
     }
 
@@ -105,11 +125,11 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     
     // Y-axis (temperature)
     ctx.moveTo(margin.left, margin.top);
-    ctx.lineTo(margin.left, height - margin.bottom);
+    ctx.lineTo(margin.left, dimensions.height - margin.bottom);
     
     // X-axis (humidity)
     ctx.moveTo(margin.left, margin.top);
-    ctx.lineTo(width - margin.right, margin.top);
+    ctx.lineTo(dimensions.width - margin.right, margin.top);
     ctx.stroke();
 
     // Add labels
@@ -132,13 +152,13 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 
     // Axis titles
     ctx.save();
-    ctx.translate(20, height/2);
+    ctx.translate(20, dimensions.height/2);
     ctx.rotate(-Math.PI/2);
     ctx.textAlign = 'center';
     ctx.fillText(`Air Temperature (°${tempUnit})`, 0, 0);
     ctx.restore();
 
-    ctx.fillText('Relative Humidity (%)', width/2, 30);
+    ctx.fillText('Relative Humidity (%)', dimensions.width/2, 30);
 
     // Draw current point
     const currentX = margin.left + (humidity / 100) * chartWidth;
@@ -152,16 +172,14 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.lineWidth = 2;
     ctx.stroke();
 
-  }, [airTemp, humidity, tempUnit]);
+  }, [airTemp, humidity, tempUnit, dimensions]);
 
   return (
-    <div className="vpd-chart">
+    <div ref={containerRef} className="vpd-chart">
       <h1>VPD Chart</h1>
       <canvas 
         ref={canvasRef}
         style={{
-          width: `${width}px`,
-          height: `${height}px`,
           display: 'block',
           marginBottom: '20px'
         }}

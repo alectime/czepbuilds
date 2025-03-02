@@ -263,18 +263,46 @@
   }
 }
 
-/* VPD Calculator Page Styles */
+/* VPD Calculator Container */
+.calculator-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* VPD Calculator Layout */
 .calculator-layout {
   display: flex;
   flex-direction: row;
   gap: 2rem;
   align-items: flex-start;
   margin: 2rem 0;
+  width: 100%;
 }
 
 .vpd-visualization {
   flex: 1;
   min-width: 0;
+  width: 100%;
+}
+
+.vpd-chart {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.vpd-chart h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.vpd-chart canvas {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
 .calculator-form {
@@ -283,6 +311,8 @@
   background-color: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 2rem;
 }
 
 .calculator-notes {
@@ -358,4 +388,101 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #007bff;
+}
+
+/* Responsive styles for calculator */
+@media (max-width: 1200px) {
+  .calculator-container {
+    max-width: 1000px;
+  }
+
+  .vpd-chart {
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .calculator-container {
+    max-width: 800px;
+  }
+
+  .calculator-layout {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .vpd-visualization {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 1rem;
+  }
+
+  .calculator-form {
+    width: 100%;
+    max-width: 500px;
+    position: static;
+  }
+
+  .vpd-chart h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .calculator-container {
+    padding: 0 0.5rem;
+  }
+
+  .calculator-layout {
+    margin: 1rem 0;
+  }
+
+  .vpd-visualization {
+    max-width: 100%;
+  }
+
+  .calculator-form {
+    padding: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .vpd-result {
+    margin-top: 1.5rem;
+  }
+
+  .vpd-chart h1 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calculator-container {
+    padding: 0;
+  }
+
+  .project-section {
+    margin-bottom: 2rem;
+  }
+
+  .calculator-notes {
+    margin-top: 1.5rem;
+    padding: 1rem;
+  }
+
+  .unit-toggle button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .vpd-value {
+    font-size: 1.2rem;
+  }
+
+  .vpd-chart h1 {
+    font-size: 1.1rem;
+  }
 } 
