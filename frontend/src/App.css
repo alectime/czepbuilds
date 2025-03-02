@@ -156,36 +156,37 @@ img {
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-text-light);
+  background-color: var(--color-off-white);
+  color: var(--color-black);
+  border: 2px solid var(--color-black);
 }
 
 .btn-primary:hover {
-  background-color: transparent;
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  background-color: var(--color-background-dark);
+  border-color: var(--color-off-white);
+  color: var(--color-off-white);
 }
 
 .btn-secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-text);
+  background-color: transparent;
+  color: var(--color-off-white);
+  border: 2px solid var(--color-off-white);
 }
 
 .btn-secondary:hover {
-  background-color: transparent;
-  border-color: var(--color-secondary);
-  color: var(--color-secondary);
+  background-color: var(--color-off-white);
+  color: var(--color-black);
 }
 
 .btn-accent {
-  background-color: var(--color-accent);
-  color: var(--color-text-light);
+  background-color: var(--color-off-white);
+  color: var(--color-black);
 }
 
 .btn-accent:hover {
   background-color: transparent;
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--color-off-white);
+  color: var(--color-off-white);
 }
 
 /* Responsive utility classes */

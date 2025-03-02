@@ -2,45 +2,45 @@ import ProjectCard from './ProjectCard';
 import '../styles/ProjectsSection.css';
 
 const ProjectsSection = () => {
-  // Sample project data - this would typically come from a CMS or API
+  // Real projects data
   const projects = [
     {
       id: 1,
-      title: 'E-Commerce Platform',
-      description: 'A modern e-commerce platform built with React, Node.js, and MongoDB with full payment processing capabilities.',
-      imageUrl: 'https://via.placeholder.com/600x400',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-      projectUrl: '#',
+      title: 'Spore Link',
+      description: 'A comprehensive platform connecting mycology enthusiasts with cultivation resources, strain databases, and community knowledge sharing.',
+      imageUrl: 'https://placehold.co/600x400/123524/f7f7f2?text=Spore+Link',
+      technologies: ['React', 'Firebase', 'Node.js', 'MongoDB'],
+      projectUrl: '/projects/spore-link',
       githubUrl: '#'
     },
     {
       id: 2,
-      title: 'Workout Tracker App',
-      description: 'Mobile-first web application for tracking workouts, setting goals, and monitoring progress over time.',
-      imageUrl: 'https://via.placeholder.com/600x400',
-      technologies: ['TypeScript', 'React', 'Firebase', 'Chart.js'],
-      projectUrl: '#',
+      title: 'Controlled Environmental Agriculture Builds',
+      description: 'Custom-designed growing environments for precision agriculture, featuring automated climate control systems and modular construction.',
+      imageUrl: 'https://placehold.co/600x400/123524/f7f7f2?text=CEA+Builds',
+      technologies: ['IoT', 'Automation', 'CAD', 'Sustainable Design'],
+      projectUrl: '/projects/cea-builds',
       githubUrl: '#'
     },
     {
       id: 3,
-      title: 'Smart Home Dashboard',
-      description: 'An IoT dashboard for controlling and monitoring smart home devices with real-time data visualization.',
-      imageUrl: 'https://via.placeholder.com/600x400',
-      technologies: ['React', 'WebSockets', 'Node.js', 'IoT'],
-      projectUrl: '#',
+      title: 'VPD Calculator',
+      description: 'An interactive tool for calculating Vapor Pressure Deficit, essential for optimizing growing conditions in controlled environments.',
+      imageUrl: 'https://placehold.co/600x400/123524/f7f7f2?text=VPD+Calculator',
+      technologies: ['TypeScript', 'React', 'D3.js', 'Progressive Web App'],
+      projectUrl: '/projects/vpd-calculator',
       githubUrl: '#'
     }
   ];
 
   return (
     <section className="projects-section" id="projects">
+      <div className="section-header">
+        <h2>Projects</h2>
+        <div className="divider"></div>
+        <p>A showcase of my current work and ongoing projects</p>
+      </div>
       <div className="container">
-        <div className="section-header">
-          <h2>Projects</h2>
-          <div className="divider"></div>
-          <p>A showcase of my recent work and personal projects</p>
-        </div>
         <div className="projects-grid">
           {projects.map(project => (
             <ProjectCard

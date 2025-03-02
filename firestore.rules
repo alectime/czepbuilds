@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Function to check if a request is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Function to check if a user is an admin
+    function isAdmin() {
+      return isAuthenticated() 
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Function to verify request contains valid CSRF token
+    function hasCsrfToken() {
+      return request.resource.data.csrfToken is string 
+        && request.resource.data.csrfToken.size() > 20;
+    }
+    
+    // Function to check for suspicious data
+    function isSuspicious() {
+      // Check for overly large data
+      return request.resource.data.email.size() > 100 
+        || (request.resource.data.userAgent is string && request.resource.data.userAgent.size() > 500);
+    }
+    
+    // Function to check rate limiting on a collection
+    function isRateLimited(collection) {
+      let recentWrites = getAfter(/databases/$(database)/documents/rateLimits/$(request.ip)).data.counts[collection];
+      return recentWrites > 5;
+    }
+    
+    // Only admins can read user subscriptions
+    match /subscriptions/{subscriptionId} {
+      allow read: if isAdmin();
+      
+      // Anyone can create a subscription with restrictions
+      allow create: if 
+        hasCsrfToken() 
+        && !isSuspicious()
+        && request.resource.data.email is string
+        && request.resource.data.email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
+        && request.resource.data.consentGiven == true
+        && request.resource.data.timestamp == request.time;
+        
+      // No updates allowed for subscriptions
+      allow update: if false;
+      
+      // Only admins can delete subscriptions
+      allow delete: if isAdmin();
+    }
+    
+    // Only admins have access to admin collection
+    match /admins/{userId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // System collections
+    match /rateLimits/{ip} {
+      allow read, write: if false; // Only accessed via server-side functions
+    }
+    
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} 

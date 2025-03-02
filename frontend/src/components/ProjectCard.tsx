@@ -1,4 +1,5 @@
 import '../styles/ProjectCard.css';
+import { Link } from 'react-router-dom';
 
 interface ProjectCardProps {
   title: string;
@@ -17,6 +18,9 @@ const ProjectCard = ({
   projectUrl,
   githubUrl
 }: ProjectCardProps) => {
+  // Determine if the project URL is internal or external
+  const isInternalLink = projectUrl && projectUrl.startsWith('/');
+
   return (
     <div className="project-card">
       <div className="project-image">
@@ -32,9 +36,15 @@ const ProjectCard = ({
         </div>
         <div className="project-links">
           {projectUrl && (
-            <a href={projectUrl} target="_blank" rel="noopener noreferrer" className="project-link">
-              View Project
-            </a>
+            isInternalLink ? (
+              <Link to={projectUrl} className="project-link">
+                View Project
+              </Link>
+            ) : (
+              <a href={projectUrl} target="_blank" rel="noopener noreferrer" className="project-link">
+                View Project
+              </a>
+            )
           )}
           {githubUrl && (
             <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="github-link">

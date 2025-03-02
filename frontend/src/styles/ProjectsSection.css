@@ -6,6 +6,10 @@
 .section-header {
   text-align: center;
   margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
 }
 
 .section-header h2 {
@@ -17,14 +21,14 @@
 .section-header .divider {
   height: 4px;
   width: 80px;
-  background: linear-gradient(to right, var(--color-primary), var(--color-accent));
+  background: var(--color-primary);
   margin: 0 auto 2rem;
   border-radius: 2px;
 }
 
 .section-header p {
   font-size: 1.2rem;
-  color: var(--color-secondary);
+  color: var(--color-beige);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -35,6 +39,9 @@
   gap: 2.5rem;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.container {
   padding: 0 1.5rem;
 }
 

@@ -1,5 +1,5 @@
 .coming-soon-section {
-  background-color: #121212;
+  background-color: var(--color-background-dark);
   padding: 5rem 0;
 }
 
@@ -12,21 +12,21 @@
 .coming-soon-content h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #fff;
+  color: var(--color-off-white);
   font-weight: 700;
 }
 
 .divider {
   height: 4px;
   width: 80px;
-  background: linear-gradient(to right, #61dafb, #a2abfe);
+  background: var(--color-primary);
   margin: 0 auto 2rem;
   border-radius: 2px;
 }
 
 .coming-soon-content > p {
   font-size: 1.2rem;
-  color: #b3b3b3;
+  color: var(--color-beige);
   max-width: 700px;
   margin: 0 auto 3rem;
   line-height: 1.6;
@@ -40,46 +40,50 @@
 }
 
 .feature {
-  background-color: #1a1a1a;
+  background-color: var(--color-black);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: transform var(--transition-speed);
+  border: 2px solid var(--color-primary);
 }
 
 .feature:hover {
   transform: translateY(-5px);
+  border-color: var(--color-beige);
 }
 
 .feature-icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  color: var(--color-primary);
 }
 
 .feature h3 {
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  color: #fff;
+  color: var(--color-off-white);
 }
 
 .feature p {
   font-size: 0.95rem;
-  color: #b3b3b3;
+  color: var(--color-beige);
   line-height: 1.5;
 }
 
 .subscribe {
-  background-color: #1a1a1a;
+  background-color: var(--color-black);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
   max-width: 600px;
   margin: 0 auto;
+  border: 2px solid var(--color-primary);
 }
 
 .subscribe p {
   font-size: 1.1rem;
-  color: #fff;
+  color: var(--color-off-white);
   margin-bottom: 1.5rem;
 }
 
@@ -95,24 +99,26 @@
   border: none;
   border-radius: 4px 0 0 4px;
   font-size: 1rem;
-  background-color: #2a2a2a;
-  color: #fff;
+  background-color: var(--color-background-dark);
+  color: var(--color-off-white);
 }
 
 .subscribe-form button {
   padding: 0.8rem 1.5rem;
   border: none;
   border-radius: 0 4px 4px 0;
-  background-color: #61dafb;
-  color: #000;
+  background-color: var(--color-off-white);
+  color: var(--color-black);
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all var(--transition-speed);
+  border: 2px solid var(--color-off-white);
 }
 
 .subscribe-form button:hover {
-  background-color: #4db6d6;
+  background-color: transparent;
+  color: var(--color-off-white);
 }
 
 /* Responsive styles */

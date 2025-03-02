@@ -1,4 +1,5 @@
 import '../styles/ComingSoonSection.css';
+import SecureSubscribeForm from './SecureSubscribeForm';
 
 const ComingSoonSection = () => {
   return (
@@ -30,10 +31,7 @@ const ComingSoonSection = () => {
           </div>
           <div className="subscribe">
             <p>Get notified when we launch:</p>
-            <div className="subscribe-form">
-              <input type="email" placeholder="Enter your email" />
-              <button>Notify Me</button>
-            </div>
+            <SecureSubscribeForm />
           </div>
         </div>
       </div>

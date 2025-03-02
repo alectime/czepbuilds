@@ -1,5 +1,21 @@
 {
   "projects": {
     "default": "czepbuilds-d99da"
-  }
+  },
+  "targets": {
+    "czepbuilds-d99da": {
+      "hosting": {
+        "default": [
+          "czepbuilds-d99da"
+        ],
+        "czepbuilds": [
+          "czepbuilds"
+        ],
+        "czepbuilds-com": [
+          "czepbuilds-com"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

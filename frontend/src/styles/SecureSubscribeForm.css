@@ -1,0 +1,115 @@
+.secure-subscribe-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.secure-subscribe-form .form-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.secure-subscribe-form input[type="email"] {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.secure-subscribe-form input[type="email"]:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.secure-subscribe-form input[type="email"].input-error {
+  border-color: #e53935;
+  background-color: rgba(229, 57, 53, 0.05);
+}
+
+.secure-subscribe-form button {
+  padding: 12px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.secure-subscribe-form button:hover {
+  background-color: #3a7bc8;
+}
+
+.secure-subscribe-form button:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.secure-subscribe-form button[aria-busy="true"]::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.secure-subscribe-form .form-message {
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.secure-subscribe-form .form-message.success {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #2e7d32;
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.secure-subscribe-form .form-message.error {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #d32f2f;
+  border: 1px solid rgba(244, 67, 54, 0.2);
+}
+
+.secure-subscribe-form .privacy-notice {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+.secure-subscribe-form .privacy-notice a {
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+.secure-subscribe-form .privacy-notice a:hover {
+  text-decoration: underline;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+  .secure-subscribe-form .form-group {
+    flex-direction: column;
+  }
+  
+  .secure-subscribe-form button {
+    width: 100%;
+  }
+} 
