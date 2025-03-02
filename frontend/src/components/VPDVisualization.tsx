@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { calculateVPD, calculateDewPoint } from '../utils/vpdCalculations';
+import { calculateVPD } from '../utils/vpdCalculations';
 
 interface VPDVisualizationProps {
   airTemp: number;
@@ -163,46 +163,6 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       }
     }
 
-    // Draw dew point line
-    ctx.strokeStyle = 'rgba(255, 140, 0, 0.9)'; // Orange for dew point (danger)
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-
-    // Calculate and draw dew point line
-    for (let h = 0; h <= 100; h += 1) {
-      // For each humidity value, calculate the corresponding dew point
-      // We'll use a reference temperature (middle of our range) to calculate dew point
-      const referenceTemp = tempUnit === 'F' ? 77 : 25; // 77°F or 25°C
-      const referenceTempC = tempUnit === 'F' ? fahrenheitToCelsius(referenceTemp) : referenceTemp;
-      
-      // Calculate dew point in Celsius
-      const dewPointC = calculateDewPoint(referenceTempC, h);
-      
-      // Convert back to the current unit if needed
-      const dewPoint = tempUnit === 'F' ? (dewPointC * 9/5) + 32 : dewPointC;
-      
-      // Only draw if the dew point is within our temperature range
-      if (dewPoint >= tempRange.min && dewPoint <= tempRange.max) {
-        // Flipped X-axis (humidity): 100% on left, 0% on right
-        const x = margin.left + ((100 - h) / 100) * chartWidth;
-        // Flipped Y-axis (temperature): Low temp at top, high temp at bottom
-        const y = margin.top + ((dewPoint - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
-        
-        if (h === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      }
-    }
-    ctx.stroke();
-
-    // Add dew point label
-    ctx.font = titleFontSize;
-    ctx.fillStyle = 'rgba(255, 140, 0, 0.9)';
-    ctx.textAlign = 'right';
-    ctx.fillText('Dew Point', dimensions.width - margin.right - 10, margin.top + 25);
-
     // Draw border
     ctx.strokeStyle = '#ccc';
     ctx.lineWidth = 1;
@@ -276,16 +236,6 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
     ctx.stroke();
-
-    // Calculate and display current dew point
-    const currentTempC = tempUnit === 'F' ? fahrenheitToCelsius(airTemp) : airTemp;
-    const currentDewPointC = calculateDewPoint(currentTempC, humidity);
-    const currentDewPoint = tempUnit === 'F' ? (currentDewPointC * 9/5) + 32 : currentDewPointC;
-    
-    ctx.font = labelFontSize;
-    ctx.fillStyle = 'rgba(255, 140, 0, 0.9)';
-    ctx.textAlign = 'left';
-    ctx.fillText(`Current Dew Point: ${currentDewPoint.toFixed(1)}°${tempUnit}`, margin.left, dimensions.height - margin.bottom + 25);
 
   }, [airTemp, humidity, tempUnit, dimensions]);
 
