@@ -31,7 +31,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 600, height: 500 });
-  const margin = { top: 40, right: 30, bottom: 40, left: 50 };
+  const margin = { top: 30, right: 20, bottom: 20, left: 40 };
 
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
@@ -92,9 +92,10 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        // Calculate height as 5/6 of width for a slightly wider than tall chart
-        const width = Math.min(containerWidth, 900);
-        const height = Math.floor(width * 0.83); // 5:6 aspect ratio
+        // Make the chart take up the full container width
+        const width = containerWidth;
+        // Maintain aspect ratio
+        const height = Math.floor(width * 0.75);
         setDimensions({ width, height });
       }
     };
@@ -260,8 +261,9 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
     
     // Y-axis title (Temperature) - rotated and positioned inside the chart
+    // Move it further right to avoid overlapping with temperature values
     ctx.save();
-    ctx.translate(margin.left + 30, margin.top + chartHeight / 2);
+    ctx.translate(margin.left + 50, margin.top + chartHeight / 2);
     ctx.rotate(-Math.PI/2);
     ctx.textAlign = 'center';
     ctx.font = titleFontSize;
@@ -307,6 +309,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         onClick={handleCanvasClick}
         style={{
           display: 'block',
+          width: '100%',
           marginBottom: '20px'
         }}
       />

@@ -1,0 +1,142 @@
+.vpd-calculator {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.input-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-with-units {
+  display: flex;
+  align-items: center;
+}
+
+.input-with-units input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.unit-selector {
+  display: flex;
+  margin-left: 10px;
+}
+
+.unit-selector button {
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.unit-selector button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.unit-selector button:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.unit-selector button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.unit {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.vpd-result {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.vpd-result h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.vpd-status {
+  margin: 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.chart-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.vpd-chart {
+  width: 100%;
+}
+
+.vpd-chart h1 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .input-group {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .chart-container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .vpd-calculator {
+    padding: 10px;
+  }
+  
+  .vpd-result h2 {
+    font-size: 1.2rem;
+  }
+  
+  .vpd-status {
+    font-size: 14px;
+  }
+  
+  .vpd-chart h1 {
+    font-size: 1.2rem;
+  }
+} 
