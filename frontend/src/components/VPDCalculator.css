@@ -11,17 +11,24 @@
   flex-direction: row;
   gap: 20px;
   width: 100%;
+  min-height: 500px; /* Minimum height for the layout */
 }
 
 .chart-container {
-  flex: 3;
-  min-width: 350px; /* Minimum width to match the minimum in VPDVisualization */
+  flex: 4; /* Increased from 3 to 4 to give more space to the chart */
+  min-width: 350px;
+  height: 100%; /* Take full height of parent */
+  display: flex;
+  flex-direction: column;
 }
 
 .controls-container {
   flex: 1;
   min-width: 250px;
   max-width: 350px;
+  height: 100%; /* Take full height of parent */
+  display: flex;
+  flex-direction: column;
 }
 
 .control-panel {
@@ -32,6 +39,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%; /* Take full height of parent */
 }
 
 .vpd-result {
@@ -114,6 +122,9 @@
 
 .vpd-chart {
   width: 100%;
+  height: 100%; /* Take full height of parent */
+  display: flex;
+  flex-direction: column;
 }
 
 .vpd-chart h1 {
@@ -127,16 +138,20 @@
   .vpd-layout {
     flex-direction: column;
     align-items: center;
+    min-height: auto; /* Reset min-height for mobile */
   }
   
   .chart-container {
     width: 100%;
     max-width: 700px;
+    height: auto; /* Allow height to be determined by content */
+    min-height: 400px; /* Minimum height for the chart on mobile */
   }
   
   .controls-container {
     width: 100%;
     max-width: 700px;
+    height: auto; /* Allow height to be determined by content */
   }
 }
 

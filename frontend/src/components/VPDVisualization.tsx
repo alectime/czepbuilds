@@ -92,10 +92,18 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
+        const containerHeight = containerRef.current.clientHeight || window.innerHeight * 0.7;
+        
         // Make the chart take up the full container width with a minimum size
         const width = Math.max(containerWidth, 350);
-        // Maintain aspect ratio with a minimum height
-        const height = Math.max(Math.floor(width * 0.75), 350);
+        
+        // If in horizontal layout (side by side with controls), use container height
+        // Otherwise use an aspect ratio based on width
+        const isWideScreen = window.innerWidth > 900;
+        const height = isWideScreen 
+          ? Math.max(containerHeight - 20, 350) // Subtract padding
+          : Math.max(Math.floor(width * 0.85), 350); // Taller aspect ratio for more vertical space
+        
         setDimensions({ width, height });
       }
     };
@@ -309,7 +317,8 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         style={{
           display: 'block',
           width: '100%',
-          marginBottom: '20px'
+          height: '100%',
+          flex: '1'
         }}
       />
     </div>
