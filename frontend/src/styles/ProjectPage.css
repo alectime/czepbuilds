@@ -291,9 +291,8 @@
 
 .vpd-chart {
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
-  aspect-ratio: 1 / 1;
   position: relative;
 }
 
@@ -301,13 +300,17 @@
   font-size: 1.5rem;
   margin-bottom: 1rem;
   text-align: center;
+  color: #333;
 }
 
 .vpd-chart canvas {
   max-width: 100%;
+  height: auto !important;
   object-fit: contain;
   display: block;
   margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
 .calculator-form {
@@ -319,6 +322,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 2rem;
+  align-self: flex-start;
 }
 
 .calculator-notes {
@@ -439,7 +443,7 @@
   }
   
   .vpd-chart {
-    max-width: 900px;
+    max-width: 1000px;
   }
   
   .calculator-form {

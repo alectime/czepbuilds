@@ -95,25 +95,6 @@ const VPDCalculatorPage: React.FC = () => {
               </ul>
             </div>
           </section>
-
-          <section className="project-section">
-            <h2>About VPD</h2>
-            <p>
-              Vapor Pressure Deficit (VPD) is a key metric in controlled environment agriculture that 
-              measures the difference between the amount of moisture in the air and how much moisture 
-              the air can hold when saturated. It plays a crucial role in plant transpiration, 
-              photosynthesis, and overall growth.
-            </p>
-            <p>
-              Maintaining optimal VPD levels is essential for:
-            </p>
-            <ul>
-              <li>Promoting healthy transpiration and nutrient uptake</li>
-              <li>Preventing stress on plants</li>
-              <li>Reducing risk of fungal diseases</li>
-              <li>Optimizing growth rates and crop yields</li>
-            </ul>
-          </section>
         </div>
       </div>
     </div>

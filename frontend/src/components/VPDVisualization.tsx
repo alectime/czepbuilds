@@ -14,8 +14,8 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
-  const margin = { top: 50, right: 50, bottom: 50, left: 60 };
+  const [dimensions, setDimensions] = useState({ width: 600, height: 500 });
+  const margin = { top: 50, right: 50, bottom: 60, left: 70 };
 
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
@@ -36,9 +36,10 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        // Use the smaller of the container width or a maximum width to maintain aspect ratio
-        const size = Math.min(containerWidth, 800);
-        setDimensions({ width: size, height: size });
+        // Calculate height as 5/6 of width for a slightly wider than tall chart
+        const width = Math.min(containerWidth, 900);
+        const height = Math.floor(width * 0.83); // 5:6 aspect ratio
+        setDimensions({ width, height });
       }
     };
 
@@ -81,6 +82,10 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     // Clear canvas
     ctx.clearRect(0, 0, dimensions.width, dimensions.height);
 
+    // Draw background
+    ctx.fillStyle = '#f8f9fa';
+    ctx.fillRect(margin.left, margin.top, chartWidth, chartHeight);
+
     // Draw background grid
     ctx.strokeStyle = '#e0e0e0';
     ctx.lineWidth = 0.5;
@@ -117,7 +122,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         
         // Set color based on VPD value
         let color = 'rgba(231, 76, 60, 0.5)'; // Default red for danger
-        
+         
         if (vpd >= 0.4 && vpd < 0.8) {
           color = 'rgba(46, 204, 113, 0.5)'; // Green for clones/early veg
         } else if (vpd >= 0.8 && vpd < 1.2) {
@@ -135,6 +140,11 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       }
     }
 
+    // Draw border
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(margin.left, margin.top, chartWidth, chartHeight);
+
     // Draw axes
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
@@ -150,7 +160,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.stroke();
 
     // Add labels
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#333';
     ctx.font = '14px Arial';
     ctx.textAlign = 'right';
 
@@ -172,16 +182,25 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.translate(20, dimensions.height/2);
     ctx.rotate(-Math.PI/2);
     ctx.textAlign = 'center';
+    ctx.font = 'bold 16px Arial';
     ctx.fillText(`Air Temperature (°${tempUnit})`, 0, 0);
     ctx.restore();
 
     ctx.textAlign = 'center';
+    ctx.font = 'bold 16px Arial';
     ctx.fillText('Relative Humidity (%)', dimensions.width/2, dimensions.height - 10);
 
     // Draw current point
     const currentX = margin.left + (humidity / 100) * chartWidth;
     const currentY = dimensions.height - margin.bottom - ((airTemp - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
 
+    // Draw point shadow
+    ctx.beginPath();
+    ctx.arc(currentX, currentY, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.fill();
+
+    // Draw point
     ctx.beginPath();
     ctx.arc(currentX, currentY, 6, 0, Math.PI * 2);
     ctx.fillStyle = '#000';
