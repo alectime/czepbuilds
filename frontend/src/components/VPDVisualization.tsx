@@ -92,10 +92,10 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        // Make the chart take up the full container width
-        const width = containerWidth;
-        // Maintain aspect ratio
-        const height = Math.floor(width * 0.75);
+        // Make the chart take up the full container width with a minimum size
+        const width = Math.max(containerWidth, 350);
+        // Maintain aspect ratio with a minimum height
+        const height = Math.max(Math.floor(width * 0.75), 350);
         setDimensions({ width, height });
       }
     };

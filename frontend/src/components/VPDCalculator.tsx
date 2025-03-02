@@ -59,9 +59,17 @@ const VPDCalculator: React.FC = () => {
           />
         </div>
 
-        {/* Controls and Results */}
+        {/* Controls and Results in a single tile */}
         <div className="controls-container">
-          <div className="input-section">
+          <div className="control-panel">
+            {/* VPD Result at the top */}
+            <div className="vpd-result">
+              <h2>Current VPD: {vpdValue.toFixed(2)} kPa</h2>
+              <p className="vpd-status">{vpdStatus}</p>
+            </div>
+
+            <div className="input-divider"></div>
+
             {/* Temperature Input */}
             <div className="input-group">
               <label htmlFor="airTemp">Air Temperature:</label>
@@ -106,12 +114,6 @@ const VPDCalculator: React.FC = () => {
                 <span className="unit">%</span>
               </div>
             </div>
-          </div>
-
-          {/* VPD Result */}
-          <div className="vpd-result">
-            <h2>Current VPD: {vpdValue.toFixed(2)} kPa</h2>
-            <p className="vpd-status">{vpdStatus}</p>
           </div>
         </div>
       </div>

@@ -15,25 +15,47 @@
 
 .chart-container {
   flex: 3;
-  min-width: 0; /* Allows flex item to shrink below content size */
+  min-width: 350px; /* Minimum width to match the minimum in VPDVisualization */
 }
 
 .controls-container {
   flex: 1;
   min-width: 250px;
+  max-width: 350px;
+}
+
+.control-panel {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.input-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.vpd-result {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.vpd-result h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.vpd-status {
+  margin: 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.input-divider {
+  height: 1px;
+  background-color: #ddd;
+  width: 100%;
+  margin: 0;
 }
 
 .input-group {
@@ -90,26 +112,6 @@
   font-weight: bold;
 }
 
-.vpd-result {
-  text-align: center;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.vpd-result h2 {
-  margin: 0 0 10px 0;
-  color: #333;
-  font-size: 1.3rem;
-}
-
-.vpd-status {
-  margin: 0;
-  font-size: 16px;
-  color: #555;
-}
-
 .vpd-chart {
   width: 100%;
 }
@@ -124,35 +126,23 @@
 @media (max-width: 900px) {
   .vpd-layout {
     flex-direction: column;
+    align-items: center;
   }
   
   .chart-container {
     width: 100%;
+    max-width: 700px;
   }
   
   .controls-container {
     width: 100%;
-  }
-  
-  .input-section {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .input-group {
-    flex: 1;
-    min-width: 200px;
+    max-width: 700px;
   }
 }
 
 @media (max-width: 600px) {
   .vpd-calculator {
     padding: 10px;
-  }
-  
-  .input-section {
-    flex-direction: column;
   }
   
   .vpd-result h2 {
