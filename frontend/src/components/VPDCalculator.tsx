@@ -50,7 +50,6 @@ const VPDCalculator: React.FC = () => {
             tempUnit={tempUnit}
             onChartClick={handleChartClick}
           />
-          <p className="chart-instruction">Click anywhere on the chart to set temperature and humidity values</p>
         </div>
         
         <div className="calculator-form">

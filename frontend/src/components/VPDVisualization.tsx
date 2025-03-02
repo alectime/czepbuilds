@@ -256,19 +256,22 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       ctx.fillText(`${h}%`, x, margin.top + 15);
     }
 
-    // Axis titles - keep outside the chart
-    ctx.fillStyle = '#333';
+    // Axis titles - now inside the chart with white text
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    
+    // Y-axis title (Temperature) - rotated and positioned inside the chart
     ctx.save();
-    ctx.translate(15, dimensions.height/2);
+    ctx.translate(margin.left + 30, margin.top + chartHeight / 2);
     ctx.rotate(-Math.PI/2);
     ctx.textAlign = 'center';
     ctx.font = titleFontSize;
     ctx.fillText(`Air Temperature (°${tempUnit})`, 0, 0);
     ctx.restore();
 
+    // X-axis title (Humidity) - positioned inside the chart
     ctx.textAlign = 'center';
     ctx.font = titleFontSize;
-    ctx.fillText('Relative Humidity (%)', dimensions.width/2, margin.top - 15);
+    ctx.fillText('Relative Humidity (%)', margin.left + chartWidth / 2, margin.top + 35);
 
     // Draw current point
     // Flipped X-axis (humidity): 100% on left, 0% on right
