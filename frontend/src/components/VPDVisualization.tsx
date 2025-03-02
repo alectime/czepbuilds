@@ -131,17 +131,27 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       ctx.stroke();
     }
 
-    // Draw VPD zones
-    for (let t = tempRange.min; t <= tempRange.max; t += 1) {
-      for (let h = 0; h <= 100; h += 1) {
+    // Draw VPD zones - ensure we cover the entire chart area including edges
+    // Use a slightly larger range to ensure complete coverage
+    const tempMin = tempRange.min - 1;
+    const tempMax = tempRange.max + 1;
+    
+    for (let t = tempMin; t <= tempMax; t += 1) {
+      for (let h = 0; h <= 101; h += 1) { // Extend to 101 to ensure complete coverage
         // Flipped X-axis (humidity): 100% on left, 0% on right
         const x = margin.left + ((100 - h) / 100) * chartWidth;
         // Flipped Y-axis (temperature): Low temp at top, high temp at bottom
         const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
         
-        // Calculate VPD
-        const tempC = tempUnit === 'F' ? fahrenheitToCelsius(t) : t;
-        const vpd = calculateVPD(tempC, h);
+        // Skip pixels outside the chart area
+        if (y > dimensions.height - margin.bottom || y < margin.top) continue;
+        if (x > dimensions.width - margin.right || x < margin.left) continue;
+        
+        // Calculate VPD - clamp temperature and humidity to valid ranges
+        const clampedTemp = Math.max(tempRange.min, Math.min(tempRange.max, t));
+        const clampedHumidity = Math.max(0, Math.min(100, h));
+        const tempC = tempUnit === 'F' ? fahrenheitToCelsius(clampedTemp) : clampedTemp;
+        const vpd = calculateVPD(tempC, clampedHumidity);
         
         // Set color based on VPD value
         let color = 'rgba(120, 86, 115, 0.8)'; // Purple for under transpiration danger
@@ -156,7 +166,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
           color = 'rgba(78, 140, 214, 0.8)'; // Blue for over transpiration danger
         }
 
-        // Draw pixel with proper scaling
+        // Draw pixel with proper scaling - ensure we cover the entire chart area
         const pixelWidth = Math.max(1, chartWidth/100) + 0.5;
         const pixelHeight = Math.max(1, chartHeight/(tempRange.max - tempRange.min)) + 0.5;
         
@@ -165,7 +175,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       }
     }
 
-    // Draw border
+    // Draw border - after drawing all pixels to ensure it's on top
     ctx.strokeStyle = '#ccc';
     ctx.lineWidth = 1;
     ctx.strokeRect(margin.left, margin.top, chartWidth, chartHeight);
