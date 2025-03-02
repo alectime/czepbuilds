@@ -21,7 +21,6 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
-  const celsiusToFahrenheit = (c: number) => (c * 9/5) + 32;
 
   // Define temperature range (32°F to 122°F or 0°C to 50°C)
   const tempRangeF = {
@@ -32,12 +31,6 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   const tempRangeC = {
     min: 0,
     max: 50
-  };
-
-  // Define humidity range (0% to 100%)
-  const humidityRange = {
-    min: 0,
-    max: 100
   };
 
   useEffect(() => {
