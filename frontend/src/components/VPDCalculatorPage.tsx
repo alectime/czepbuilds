@@ -37,11 +37,7 @@ const VPDCalculatorPage: React.FC = () => {
               current VPD falls within optimal ranges for different growth stages.
             </p>
             
-            <div className="calculator-layout">
-              <div className="vpd-visualization">
-                <VPDCalculator />
-              </div>
-            </div>
+            <VPDCalculator />
             
             <div className="calculator-notes">
               <h3>VPD Ranges</h3>
