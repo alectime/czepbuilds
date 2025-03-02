@@ -32,8 +32,8 @@ const VPDCalculatorPage: React.FC = () => {
           <section className="project-section">
             <h2>The Calculator</h2>
             <p>
-              Use the calculator below to determine the VPD based on air temperature, 
-              relative humidity, and leaf temperature. The visualization shows where your 
+              Use the calculator below to determine the VPD based on air temperature and 
+              relative humidity. The visualization shows where your 
               current VPD falls within optimal ranges for different growth stages.
             </p>
             
@@ -58,13 +58,12 @@ const VPDCalculatorPage: React.FC = () => {
                   <strong>Flower/Fruit Stage:</strong> VPD of 1.0-1.2 kPa is optimal for flowering and fruiting.
                 </li>
                 <li>
-                  <strong>Leaf Temperature:</strong> Plant leaves are typically cooler than ambient air 
-                  temperature due to transpiration. Using an infrared thermometer to measure actual leaf 
-                  temperature will provide the most accurate results.
+                  <strong>Environmental Control:</strong> Maintaining proper VPD levels requires balancing 
+                  temperature and humidity in your growing environment.
                 </li>
                 <li>
-                  <strong>Condensation Risk:</strong> When leaf temperature falls below the dew point, 
-                  water will condense on the leaf surface, creating conditions favorable for fungal growth.
+                  <strong>Plant Health:</strong> Proper VPD management helps prevent stress, improves nutrient uptake, 
+                  and reduces susceptibility to pests and diseases.
                 </li>
               </ul>
             </div>

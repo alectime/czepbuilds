@@ -5,7 +5,6 @@ import { calculateVPD } from '../utils/vpdCalculations';
 const VPDCalculator: React.FC = () => {
   const [airTemp, setAirTemp] = useState<number>(75);
   const [humidity, setHumidity] = useState<number>(50);
-  const [leafTemp, setLeafTemp] = useState<number>(73);
   const [tempUnit, setTempUnit] = useState<'F' | 'C'>('F');
 
   const handleTempUnitChange = (unit: 'F' | 'C') => {
@@ -14,10 +13,8 @@ const VPDCalculator: React.FC = () => {
     // Convert temperatures when changing units
     if (unit === 'C') {
       setAirTemp(Math.round((airTemp - 32) * (5 / 9)));
-      setLeafTemp(Math.round((leafTemp - 32) * (5 / 9)));
     } else {
       setAirTemp(Math.round((airTemp * (9 / 5)) + 32));
-      setLeafTemp(Math.round((leafTemp * (9 / 5)) + 32));
     }
     setTempUnit(unit);
   };
@@ -73,17 +70,6 @@ const VPDCalculator: React.FC = () => {
               type="number"
               value={airTemp}
               onChange={(e) => setAirTemp(Number(e.target.value))}
-              min={tempUnit === 'F' ? 32 : 0}
-              max={tempUnit === 'F' ? 122 : 50}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Leaf Temperature (°{tempUnit}):</label>
-            <input
-              type="number"
-              value={leafTemp}
-              onChange={(e) => setLeafTemp(Number(e.target.value))}
               min={tempUnit === 'F' ? 32 : 0}
               max={tempUnit === 'F' ? 122 : 50}
             />

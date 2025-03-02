@@ -43,26 +43,16 @@ export function calculateActualVaporPressure(tempC: number, relativeHumidity: nu
  * VPD = SVP - AVP = SVP * (1 - RH/100)
  * @param tempC Temperature in Celsius.
  * @param relativeHumidity Relative humidity as a percentage.
- * @param leafTempC Optional leaf temperature in Celsius. If provided, will calculate VPD at leaf surface.
  * @returns VPD in kPa.
  */
 export function calculateVPD(
   tempC: number, 
-  relativeHumidity: number, 
-  leafTempC?: number
+  relativeHumidity: number
 ): number {
-  if (leafTempC !== undefined) {
-    // If leaf temperature is provided, calculate VPD at leaf surface
-    const airSVP = calculateSaturationVaporPressure(tempC);
-    const airAVP = airSVP * (relativeHumidity / 100);
-    const leafSVP = calculateSaturationVaporPressure(leafTempC);
-    return leafSVP - airAVP;
-  } else {
-    // Standard VPD calculation
-    const svp = calculateSaturationVaporPressure(tempC);
-    const avp = calculateActualVaporPressure(tempC, relativeHumidity);
-    return svp - avp;
-  }
+  // Standard VPD calculation
+  const svp = calculateSaturationVaporPressure(tempC);
+  const avp = calculateActualVaporPressure(tempC, relativeHumidity);
+  return svp - avp;
 }
 
 /**
