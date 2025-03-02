@@ -15,7 +15,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 600, height: 500 });
-  const margin = { top: 50, right: 50, bottom: 60, left: 70 };
+  const margin = { top: 60, right: 50, bottom: 50, left: 70 };
 
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
@@ -90,20 +90,22 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.strokeStyle = '#e0e0e0';
     ctx.lineWidth = 0.5;
 
-    // Draw vertical grid lines (humidity)
+    // Draw vertical grid lines (humidity) - FLIPPED: 100% on left, 0% on right
     for (let h = 0; h <= 100; h += 10) {
-      const x = margin.left + (h / 100) * chartWidth;
+      // Convert h to flipped position (100-h)
+      const x = margin.left + ((100 - h) / 100) * chartWidth;
       ctx.beginPath();
       ctx.moveTo(x, margin.top);
       ctx.lineTo(x, dimensions.height - margin.bottom);
       ctx.stroke();
     }
 
-    // Draw horizontal grid lines (temperature)
+    // Draw horizontal grid lines (temperature) - FLIPPED: Low temp at top, high temp at bottom
     const tempStep = tempUnit === 'F' ? 10 : 5;
     const tempRange = tempUnit === 'F' ? tempRangeF : tempRangeC;
     for (let t = tempRange.min; t <= tempRange.max; t += tempStep) {
-      const y = dimensions.height - margin.bottom - ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+      // Flip the temperature axis (low temp at top)
+      const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
       ctx.beginPath();
       ctx.moveTo(margin.left, y);
       ctx.lineTo(dimensions.width - margin.right, y);
@@ -113,8 +115,10 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     // Draw VPD zones
     for (let t = tempRange.min; t <= tempRange.max; t += 1) {
       for (let h = 0; h <= 100; h += 1) {
-        const x = margin.left + (h / 100) * chartWidth;
-        const y = dimensions.height - margin.bottom - ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+        // Flipped X-axis (humidity): 100% on left, 0% on right
+        const x = margin.left + ((100 - h) / 100) * chartWidth;
+        // Flipped Y-axis (temperature): Low temp at top, high temp at bottom
+        const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
         
         // Calculate VPD
         const tempC = tempUnit === 'F' ? fahrenheitToCelsius(t) : t;
@@ -136,7 +140,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         const pixelHeight = Math.max(1, chartHeight/(tempRange.max - tempRange.min));
         
         ctx.fillStyle = color;
-        ctx.fillRect(x, y - pixelHeight, pixelWidth, pixelHeight);
+        ctx.fillRect(x, y, pixelWidth, pixelHeight);
       }
     }
 
@@ -150,13 +154,13 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.lineWidth = 2;
     ctx.beginPath();
     
-    // Y-axis (temperature)
+    // Y-axis (temperature) - Left side
     ctx.moveTo(margin.left, margin.top);
     ctx.lineTo(margin.left, dimensions.height - margin.bottom);
     
-    // X-axis (humidity)
-    ctx.moveTo(margin.left, dimensions.height - margin.bottom);
-    ctx.lineTo(dimensions.width - margin.right, dimensions.height - margin.bottom);
+    // X-axis (humidity) - Top side
+    ctx.moveTo(margin.left, margin.top);
+    ctx.lineTo(dimensions.width - margin.right, margin.top);
     ctx.stroke();
 
     // Add labels
@@ -164,17 +168,19 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.font = '14px Arial';
     ctx.textAlign = 'right';
 
-    // Temperature labels (Y-axis)
+    // Temperature labels (Y-axis) - FLIPPED: Low temp at top, high temp at bottom
     for (let t = tempRange.min; t <= tempRange.max; t += tempStep) {
-      const y = dimensions.height - margin.bottom - ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+      // Flip the temperature axis (low temp at top)
+      const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
       ctx.fillText(`${t}°${tempUnit}`, margin.left - 10, y + 4);
     }
 
-    // Humidity labels (X-axis)
+    // Humidity labels (X-axis) - FLIPPED: 100% on left, 0% on right
     ctx.textAlign = 'center';
     for (let h = 0; h <= 100; h += 10) {
-      const x = margin.left + (h / 100) * chartWidth;
-      ctx.fillText(`${h}%`, x, dimensions.height - margin.bottom + 20);
+      // Flip the humidity axis (100% on left)
+      const x = margin.left + ((100 - h) / 100) * chartWidth;
+      ctx.fillText(`${h}%`, x, margin.top - 10);
     }
 
     // Axis titles
@@ -188,11 +194,13 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 
     ctx.textAlign = 'center';
     ctx.font = 'bold 16px Arial';
-    ctx.fillText('Relative Humidity (%)', dimensions.width/2, dimensions.height - 10);
+    ctx.fillText('Relative Humidity (%)', dimensions.width/2, margin.top - 30);
 
     // Draw current point
-    const currentX = margin.left + (humidity / 100) * chartWidth;
-    const currentY = dimensions.height - margin.bottom - ((airTemp - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+    // Flipped X-axis (humidity): 100% on left, 0% on right
+    const currentX = margin.left + ((100 - humidity) / 100) * chartWidth;
+    // Flipped Y-axis (temperature): Low temp at top, high temp at bottom
+    const currentY = margin.top + ((airTemp - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
 
     // Draw point shadow
     ctx.beginPath();
