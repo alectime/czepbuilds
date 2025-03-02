@@ -105,9 +105,9 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.fillStyle = '#f8f9fa';
     ctx.fillRect(margin.left, margin.top, chartWidth, chartHeight);
 
-    // Draw background grid
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 0.5;
+    // Draw background grid - making it lighter and thinner
+    ctx.strokeStyle = '#f0f0f0';
+    ctx.lineWidth = 0.3;
 
     // Draw vertical grid lines (humidity) - FLIPPED: 100% on left, 0% on right
     for (let h = 0; h <= 100; h += 10) {
@@ -144,21 +144,21 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         const vpd = calculateVPD(tempC, h);
         
         // Set color based on VPD value
-        let color = 'rgba(120, 86, 115, 0.5)'; // Purple for under transpiration danger
+        let color = 'rgba(120, 86, 115, 0.8)'; // Purple for under transpiration danger
          
         if (vpd >= 0.4 && vpd < 0.8) {
-          color = 'rgba(163, 176, 58, 0.5)'; // Lime green for early veg
+          color = 'rgba(163, 176, 58, 0.8)'; // Lime green for early veg
         } else if (vpd >= 0.8 && vpd < 1.2) {
-          color = 'rgba(87, 135, 53, 0.5)'; // Green for late veg/early flower
+          color = 'rgba(87, 135, 53, 0.8)'; // Green for late veg/early flower
         } else if (vpd >= 1.2 && vpd < 1.6) {
-          color = 'rgba(244, 187, 74, 0.5)'; // Orange/yellow for mid/late flower
+          color = 'rgba(244, 187, 74, 0.8)'; // Orange/yellow for mid/late flower
         } else if (vpd >= 1.6) {
-          color = 'rgba(78, 140, 214, 0.5)'; // Blue for over transpiration danger
+          color = 'rgba(78, 140, 214, 0.8)'; // Blue for over transpiration danger
         }
 
         // Draw pixel with proper scaling
-        const pixelWidth = Math.max(1, chartWidth/100);
-        const pixelHeight = Math.max(1, chartHeight/(tempRange.max - tempRange.min));
+        const pixelWidth = Math.max(1, chartWidth/100) + 0.5;
+        const pixelHeight = Math.max(1, chartHeight/(tempRange.max - tempRange.min)) + 0.5;
         
         ctx.fillStyle = color;
         ctx.fillRect(x, y, pixelWidth, pixelHeight);

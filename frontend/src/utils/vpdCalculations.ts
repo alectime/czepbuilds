@@ -86,11 +86,11 @@ export function isLeafTempUnderDewPoint(leafTempC: number, dewPointC: number): b
  * Define VPD zones with their respective colors and labels
  */
 export const vpdZones = [
-  { min: 0.0, max: 0.4, color: 'rgba(120, 86, 115, 0.5)', label: 'Danger Zone (Under Transpiration)' },
-  { min: 0.4, max: 0.8, color: 'rgba(163, 176, 58, 0.5)', label: 'Early Vegetative Growth / Propagation (Low Transpiration)' },
-  { min: 0.8, max: 1.2, color: 'rgba(87, 135, 53, 0.5)', label: 'Late Vegetative / Early Flower (Healthy Transpiration)' },
-  { min: 1.2, max: 1.6, color: 'rgba(244, 187, 74, 0.5)', label: 'Mid / Late Flower (High Transpiration)' },
-  { min: 1.6, max: 2.0, color: 'rgba(78, 140, 214, 0.5)', label: 'Danger Zone (Over Transpiration)' }
+  { min: 0.0, max: 0.4, color: 'rgba(120, 86, 115, 0.8)', label: 'Danger Zone (Under Transpiration)' },
+  { min: 0.4, max: 0.8, color: 'rgba(163, 176, 58, 0.8)', label: 'Early Vegetative Growth / Propagation (Low Transpiration)' },
+  { min: 0.8, max: 1.2, color: 'rgba(87, 135, 53, 0.8)', label: 'Late Vegetative / Early Flower (Healthy Transpiration)' },
+  { min: 1.2, max: 1.6, color: 'rgba(244, 187, 74, 0.8)', label: 'Mid / Late Flower (High Transpiration)' },
+  { min: 1.6, max: 2.0, color: 'rgba(78, 140, 214, 0.8)', label: 'Danger Zone (Over Transpiration)' }
 ];
 
 /**
