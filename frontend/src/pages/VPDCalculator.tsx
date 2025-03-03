@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import MediaGallery from '../components/MediaGallery';
 import '../styles/ProjectPage.css';
 
@@ -30,9 +29,6 @@ const VPDCalculator: React.FC = () => {
     <div className="project-page">
       <div className="project-hero">
         <div className="container">
-          <h1>VPD Calculator</h1>
-          <div className="divider"></div>
-          <p className="project-subtitle">An interactive tool for calculating Vapor Pressure Deficit</p>
         </div>
       </div>
       
@@ -106,7 +102,6 @@ const VPDCalculator: React.FC = () => {
         </div>
         
         <div className="project-navigation">
-          <Link to="/" className="back-button">Back to Projects</Link>
           <div className="project-links">
             <a href="#" className="project-link">Use Calculator</a>
             <a href="#" className="github-link">GitHub Repo</a>
