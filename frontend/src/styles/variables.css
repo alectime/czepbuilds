@@ -5,9 +5,10 @@
   --color-beige: #d5b48c; /* Corrected from #dsb48c which appears to be a typo */
   --color-off-white: #f7f7f2;
   --color-orange: #fd801d;
+  --color-light-gray: #E6E6E6;
 
   /* Functional Colors */
-  --color-background: var(--color-off-white);
+  --color-background: var(--color-light-gray);
   --color-background-dark: var(--color-black);
   --color-text: var(--color-black);
   --color-text-light: var(--color-off-white);

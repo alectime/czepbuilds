@@ -92,7 +92,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        const containerHeight = containerRef.current.clientHeight || window.innerHeight * 0.7;
+        // containerHeight is no longer needed since we're using a square aspect ratio
         
         // Make the chart take up the full container width with a minimum size
         const width = Math.max(containerWidth, 350);
