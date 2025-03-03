@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import VPDCalculator from './VPDCalculator';
 import '../styles/ProjectPage.css'; // Reusing project page styling for consistency
 
@@ -8,16 +7,6 @@ const VPDCalculatorPage: React.FC = () => {
     <div className="project-page">
       <div className="project-page-header">
         <div className="container">
-          <Link to="/projects" className="back-button">
-            ← Back to Projects
-          </Link>
-          <h1 className="project-title">VPD Calculator</h1>
-          <div className="project-divider"></div>
-          <p className="project-overview">
-            This interactive tool helps calculate and visualize Vapor Pressure Deficit (VPD), a critical 
-            measurement for optimal plant growth conditions. VPD represents the difference between the 
-            amount of moisture in the air and how much moisture the air can hold when saturated.
-          </p>
           <div className="project-tags">
             <span className="project-tag">React</span>
             <span className="project-tag">TypeScript</span>
