@@ -8,143 +8,146 @@ const VPDCalculator: React.FC = () => {
   const [humidity, setHumidity] = useState<number>(50);
   const [tempUnit, setTempUnit] = useState<'F' | 'C'>('F');
   const [vpdValue, setVpdValue] = useState<number>(0);
-
+  
   const handleTempUnitChange = (unit: 'F' | 'C') => {
-    if (unit === tempUnit) return;
-    
-    // Convert temperature when changing units
-    if (unit === 'C') {
-      // F to C
-      setAirTemp(Math.round((airTemp - 32) * (5 / 9)));
-    } else {
-      // C to F
-      setAirTemp(Math.round((airTemp * (9 / 5)) + 32));
+    // When changing units, convert the temperature
+    if (unit !== tempUnit) {
+      if (unit === 'C') {
+        // Convert F to C
+        setAirTemp(Math.round((airTemp - 32) * (5 / 9)));
+      } else {
+        // Convert C to F
+        setAirTemp(Math.round(airTemp * (9 / 5) + 32));
+      }
+      setTempUnit(unit);
     }
-    
-    setTempUnit(unit);
   };
 
-  // Handle chart click to update temperature and humidity
   const handleChartClick = (newTemp: number, newHumidity: number) => {
     setAirTemp(newTemp);
     setHumidity(newHumidity);
   };
 
-  // Calculate VPD whenever inputs change
+  // Calculate VPD whenever airTemp or humidity changes
   useEffect(() => {
-    // Convert to Celsius for VPD calculation if needed
+    // Convert to Celsius for calculation if needed
     const tempInC = tempUnit === 'F' ? (airTemp - 32) * (5 / 9) : airTemp;
     const vpd = calculateVPD(tempInC, humidity);
     setVpdValue(vpd);
   }, [airTemp, humidity, tempUnit]);
-
+  
+  // Determine VPD status
   const vpdStatus = (() => {
-    if (vpdValue < 0.4) return "Danger Zone (Under Transpiration)";
-    else if (vpdValue < 0.8) return "Early Vegetative Growth / Propagation (Low Transpiration)";
-    else if (vpdValue < 1.2) return "Late Vegetative / Early Flower (Healthy Transpiration)";
-    else if (vpdValue < 1.6) return "Mid / Late Flower (High Transpiration)";
-    else return "Danger Zone (Over Transpiration)";
+    if (vpdValue < 0.4) {
+      return { text: "Too Low - Under-transpiration", className: "danger" };
+    } else if (vpdValue >= 0.4 && vpdValue < 0.8) {
+      return { text: "Low - Early Veg", className: "low" };
+    } else if (vpdValue >= 0.8 && vpdValue < 1.2) {
+      return { text: "Ideal - Late Veg/Early Flower", className: "healthy" };
+    } else if (vpdValue >= 1.2 && vpdValue < 1.6) {
+      return { text: "High - Mid/Late Flower", className: "high" };
+    } else {
+      return { text: "Too High - Over-transpiration", className: "danger" };
+    }
   })();
-
-  // VPD ranges data for the ranges panel
+  
+  // VPD ranges for the reference panel
   const vpdRanges = [
-    { color: '#785673', range: '0.0-0.4 kPa', description: 'Danger Zone (Under Transpiration)' },
-    { color: '#a3b03a', range: '0.4-0.8 kPa', description: 'Early Vegetative Growth / Propagation (Low Transpiration)' },
-    { color: '#578735', range: '0.8-1.2 kPa', description: 'Late Vegetative / Early Flower (Healthy Transpiration)' },
-    { color: '#f4bb4a', range: '1.2-1.6 kPa', description: 'Mid / Late Flower (High Transpiration)' },
-    { color: '#4e8cd6', range: '1.6-2.0 kPa', description: 'Danger Zone (Over Transpiration)' },
+    { range: "< 0.4", label: "Too Low (Under-transpiration)", color: "#785673" },
+    { range: "0.4 - 0.8", label: "Low (Early Veg)", color: "#a3b03a" },
+    { range: "0.8 - 1.2", label: "Ideal (Late Veg/Early Flower)", color: "#578735" },
+    { range: "1.2 - 1.6", label: "High (Mid/Late Flower)", color: "#f4bb4a" },
+    { range: "> 1.6", label: "Too High (Over-transpiration)", color: "#4e8cd6" }
   ];
 
   return (
     <div className="vpd-calculator">
       <div className="vpd-layout">
         {/* VPD Chart */}
-        <div className="chart-container">
-          <VPDVisualization
-            airTemp={airTemp}
-            humidity={humidity}
-            tempUnit={tempUnit}
-            onChartClick={handleChartClick}
-          />
+        <div className="calculator-section">
+          <div className="chart-container">
+            <VPDVisualization
+              airTemp={airTemp}
+              humidity={humidity}
+              tempUnit={tempUnit}
+              onChartClick={handleChartClick}
+            />
+          </div>
         </div>
-
-        {/* Controls and VPD Ranges in a responsive container */}
+        
+        {/* Controls and VPD information */}
         <div className="controls-and-ranges">
-          {/* Controls Panel */}
-          <div className="controls-container">
-            <div className="control-panel">
-              {/* VPD Result at the top */}
-              <div className="vpd-result">
-                <h2>Current VPD: {vpdValue.toFixed(2)} kPa</h2>
-                <p className="vpd-status">{vpdStatus}</p>
+          {/* Combined Controls Tile */}
+          <div className="compact-controls-tile">
+            {/* Current VPD Display */}
+            <div className="compact-vpd-display">
+              <div className="vpd-value-display">
+                <div className="vpd-label">Current VPD</div>
+                <div className={`vpd-value ${vpdStatus.className}`}>{vpdValue.toFixed(2)} kPa</div>
               </div>
-
-              <div className="input-divider"></div>
-
-              {/* Temperature Input */}
-              <div className="input-group">
-                <label htmlFor="airTemp">Air Temperature:</label>
-                <div className="input-with-units">
-                  <input
-                    id="airTemp"
-                    type="number"
-                    value={airTemp}
-                    onChange={(e) => setAirTemp(Number(e.target.value))}
-                    min={tempUnit === 'F' ? 32 : 0}
-                    max={tempUnit === 'F' ? 122 : 50}
-                  />
-                  <div className="unit-selector">
-                    <button
-                      className={tempUnit === 'F' ? 'active' : ''}
-                      onClick={() => handleTempUnitChange('F')}
-                    >
-                      °F
-                    </button>
-                    <button
-                      className={tempUnit === 'C' ? 'active' : ''}
-                      onClick={() => handleTempUnitChange('C')}
-                    >
-                      °C
-                    </button>
-                  </div>
+              <div className="vpd-status-text">{vpdStatus.text}</div>
+            </div>
+            
+            {/* Divider */}
+            <div className="compact-tile-divider"></div>
+            
+            {/* Temperature Control */}
+            <div className="compact-control">
+              <label htmlFor="air-temp">Air Temperature</label>
+              <div className="input-with-units">
+                <input
+                  id="air-temp"
+                  type="number"
+                  value={airTemp}
+                  onChange={(e) => setAirTemp(parseFloat(e.target.value) || 0)}
+                  min={tempUnit === 'F' ? 50 : 10}
+                  max={tempUnit === 'F' ? 95 : 35}
+                />
+                <div className="unit-selector">
+                  <button
+                    className={tempUnit === 'F' ? 'active' : ''}
+                    onClick={() => handleTempUnitChange('F')}
+                  >
+                    °F
+                  </button>
+                  <button
+                    className={tempUnit === 'C' ? 'active' : ''}
+                    onClick={() => handleTempUnitChange('C')}
+                  >
+                    °C
+                  </button>
                 </div>
               </div>
-
-              {/* Humidity Input */}
-              <div className="input-group">
-                <label htmlFor="humidity">Relative Humidity:</label>
-                <div className="input-with-units">
-                  <input
-                    id="humidity"
-                    type="number"
-                    value={humidity}
-                    onChange={(e) => setHumidity(Number(e.target.value))}
-                    min={0}
-                    max={100}
-                  />
-                  <span className="unit">%</span>
-                </div>
+            </div>
+            
+            {/* Humidity Control */}
+            <div className="compact-control">
+              <label htmlFor="humidity">Relative Humidity</label>
+              <div className="input-with-units">
+                <input
+                  id="humidity"
+                  type="number"
+                  value={humidity}
+                  onChange={(e) => setHumidity(parseFloat(e.target.value) || 0)}
+                  min={0}
+                  max={100}
+                />
+                <div className="unit">%</div>
               </div>
             </div>
           </div>
-
+          
           {/* VPD Ranges Panel */}
-          <div className="vpd-ranges-container">
-            <div className="vpd-ranges-panel">
-              <h3 className="vpd-ranges-title">VPD Ranges</h3>
-              
-              {vpdRanges.map((range, index) => (
-                <div key={index} className="vpd-range-item">
-                  <div 
-                    className="color-indicator" 
-                    style={{ backgroundColor: range.color }}
-                  ></div>
-                  <div className="range-text">
-                    <strong>{range.range}:</strong> {range.description}
-                  </div>
+          <div className="vpd-ranges-panel">
+            <div className="vpd-ranges-title">VPD Ranges (kPa)</div>
+            {vpdRanges.map((range, index) => (
+              <div key={index} className="vpd-range-item">
+                <div className="color-indicator" style={{ backgroundColor: range.color }}></div>
+                <div className="range-text">
+                  <span>{range.range}:</span> {range.label}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

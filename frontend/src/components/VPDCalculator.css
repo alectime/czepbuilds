@@ -1,108 +1,180 @@
 .vpd-calculator {
-  width: 100%;
-  max-width: 1200px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
+  max-width: 1400px;
 }
 
 .vpd-layout {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  min-height: 500px; /* Minimum height for the layout */
+  gap: 1.5rem;
+}
+
+.calculator-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .chart-container {
-  flex: 3; /* Reduced from 4 to 3 for better balance */
-  min-width: 300px;
-  position: relative;
-  height: auto; /* Allow height to be determined by the parent */
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto 1rem auto;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.controls-container {
-  flex: 1;
-  min-width: 250px;
-  max-width: 300px;
+/* Controls section */
+.controls-and-ranges {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.control-panel {
-  background-color: #f8f9fa;
-  padding: 20px;
+/* Mobile-specific styles */
+@media (max-width: 767px) {
+  .vpd-calculator {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  .chart-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 0;
+  }
+  
+  .controls-and-ranges {
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    max-width: 100%;
+  }
+  
+  /* Ensure controls and ranges maintain rectangle shape */
+  .compact-controls-tile,
+  .vpd-ranges-panel {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  /* Keep compact controls on mobile */
+  .compact-control {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .compact-control label {
+    margin-bottom: 4px;
+  }
+  
+  .input-with-units {
+    width: 100%;
+  }
+}
+
+.vpd-result {
+  background-color: #fff;
+  padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  height: 100%; /* Take full height of parent */
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
-/* New VPD ranges container */
+.vpd-result h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.vpd-status {
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
 .vpd-ranges-container {
-  flex: 1;
-  min-width: 250px;
-  max-width: 300px;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 }
 
 .vpd-ranges-panel {
-  background-color: #f8f9fa;
-  padding: 20px;
+  background-color: #fff;
+  padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  height: 100%; /* Take full height of parent */
 }
 
 .vpd-ranges-title {
-  margin: 0 0 10px 0;
-  color: #333;
-  font-size: 1.3rem;
   font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
 }
 
 .vpd-range-item {
   display: flex;
   align-items: center;
-  padding: 8px 0;
+  margin-bottom: 0.75rem;
 }
 
 .color-indicator {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
   margin-right: 10px;
-  flex-shrink: 0;
 }
 
 .range-text {
-  font-size: 14px;
-  color: #333;
+  font-size: 0.9rem;
 }
 
-.vpd-result {
-  text-align: center;
-  margin-bottom: 0;
+.range-text span {
+  font-weight: bold;
 }
 
-.vpd-result h2 {
-  margin: 0 0 10px 0;
-  color: #333;
-  font-size: 1.3rem;
+/* VPD status colors */
+.vpd-status.danger {
+  background-color: #ffdddd;
+  color: #d32f2f;
 }
 
-.vpd-status {
-  margin: 0;
-  font-size: 16px;
-  color: #555;
+.vpd-status.low {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.vpd-status.healthy {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.vpd-status.high {
+  background-color: #fff3e0;
+  color: #e65100;
 }
 
 .input-divider {
@@ -168,38 +240,44 @@
 }
 
 .vpd-chart {
-  width: 100%;
-  height: 100%; /* Take full height of parent */
-  display: flex;
-  flex-direction: column;
-}
-
-.vpd-chart h1 {
-  text-align: center;
-  margin-bottom: 15px;
-  font-size: 1.5rem;
+  width: 100%; 
+  height: auto;
+  background-color: transparent;
 }
 
 /* Responsive adjustments */
+@media (max-width: 1400px) {
+  .chart-container {
+    max-width: 900px;
+    max-height: 900px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .chart-container {
+    max-width: 800px;
+    max-height: 800px;
+  }
+}
+
 @media (max-width: 1100px) {
   .vpd-layout {
-    flex-direction: column;
+    gap: 1rem;
   }
   
   .chart-container {
-    width: 100%;
-    max-width: 100%;
-    aspect-ratio: 4/3; /* Wider aspect ratio for smaller screens */
+    max-width: 700px;
+    max-height: 700px;
+    margin-bottom: 1rem;
   }
   
-  .controls-container, .vpd-ranges-container {
-    max-width: 100%;
+  .controls-and-ranges {
     width: 100%;
+    max-width: 800px;
   }
   
   /* Create a two-column layout for controls and ranges on medium screens */
   .controls-and-ranges {
-    display: flex;
     flex-direction: row;
     gap: 20px;
   }
@@ -209,27 +287,133 @@
   }
 }
 
-@media (max-width: 768px) {
-  /* Stack everything vertically on small screens */
-  .controls-and-ranges {
-    flex-direction: column;
-  }
-}
-
 @media (max-width: 600px) {
   .vpd-calculator {
-    padding: 10px;
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+  }
+  
+  .chart-container {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .project-section {
+    margin-top: 0 !important;
   }
   
   .vpd-result h2 {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
   
   .vpd-status {
-    font-size: 14px;
+    font-size: 0.9rem;
   }
   
-  .vpd-chart h1 {
-    font-size: 1.2rem;
+  .controls-and-ranges {
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
   }
+  
+  /* Ensure controls and ranges tiles are full width and properly stacked */
+  .compact-controls-tile,
+  .vpd-ranges-panel {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Compact controls tile for combined display and inputs */
+.compact-controls-tile {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* VPD value display */
+.compact-vpd-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 4px;
+}
+
+.vpd-value-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.vpd-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.vpd-value {
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.vpd-value.high {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.vpd-status-text {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Divider */
+.compact-tile-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 2px 0;
+}
+
+/* Compact control group */
+.compact-control {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.compact-control label {
+  min-width: 140px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* VPD status colors */
+.vpd-value.danger {
+  background-color: #ffdddd;
+  color: #d32f2f;
+}
+
+.vpd-value.low {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.vpd-value.healthy {
+  background-color: #e3f2fd;
+  color: #1565c0;
 } 

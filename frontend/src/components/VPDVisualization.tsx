@@ -39,78 +39,89 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   // Define temperature range (32°F to 122°F or 0°C to 50°C)
   const tempRangeF = {
     min: 32,
-    max: 122
+    max: 122,
+    step: 10
   };
-
+  
   const tempRangeC = {
     min: 0,
-    max: 50
+    max: 50,
+    step: 5
   };
+  
+  const tempRange = tempUnit === 'F' ? tempRangeF : tempRangeC;
 
-  // Handle click on the chart
+  // Handle canvas click
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (!onChartClick || !canvasRef.current) return;
-
+    
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
+    
+    // Get click coordinates in CSS pixels
+    const cssX = event.clientX - rect.left;
+    const cssY = event.clientY - rect.top;
+    
+    // Calculate chart area dimensions
     const chartWidth = dimensions.width - margin.left - margin.right;
     const chartHeight = dimensions.height - margin.top - margin.bottom;
-
-    // Check if click is within chart area
-    if (
-      x < margin.left || 
-      x > dimensions.width - margin.right || 
-      y < margin.top || 
-      y > dimensions.height - margin.bottom
-    ) {
+    
+    // Only process clicks within the chart area
+    if (cssX < margin.left || cssX > dimensions.width - margin.right || 
+        cssY < margin.top || cssY > dimensions.height - margin.bottom) {
       return;
     }
-
-    // Convert click position to humidity (x-axis, flipped)
-    // 100% on left, 0% on right
-    const newHumidity = Math.round(100 - ((x - margin.left) / chartWidth) * 100);
     
-    // Convert click position to temperature (y-axis, flipped)
-    // Low temp at top, high temp at bottom
-    const tempRange = tempUnit === 'F' ? tempRangeF : tempRangeC;
-    const tempSpan = tempRange.max - tempRange.min;
-    const newTemp = Math.round(tempRange.min + ((y - margin.top) / chartHeight) * tempSpan);
-
+    // Calculate relative position within chart area (0 to 1)
+    const relativeX = (cssX - margin.left) / chartWidth;
+    const relativeY = (cssY - margin.top) / chartHeight;
+    
+    // Convert to humidity (100% on LEFT, 0% on RIGHT)
+    const clickHumidity = Math.round(100 - (relativeX * 100));
+    
+    // Convert to temperature (Low at TOP, high at BOTTOM)
+    const rawTemp = tempRange.min + (relativeY * (tempRange.max - tempRange.min));
+    
+    // Round temperature to nearest step
+    const roundedTemp = Math.round(rawTemp / tempRange.step) * tempRange.step;
+    
     // Clamp values to valid ranges
-    const clampedHumidity = Math.max(0, Math.min(100, newHumidity));
-    const clampedTemp = Math.max(tempRange.min, Math.min(tempRange.max, newTemp));
-
-    // Call the callback with the new values
+    const clampedTemp = Math.max(tempRange.min, Math.min(tempRange.max, roundedTemp));
+    const clampedHumidity = Math.max(0, Math.min(100, clickHumidity));
+    
+    // Debug logging
+    console.log('Click coordinates (css):', { x: cssX, y: cssY });
+    console.log('Relative position:', { x: relativeX, y: relativeY });
+    console.log('Calculated values:', { 
+      temp: clampedTemp, 
+      humidity: clampedHumidity,
+      rawTemp,
+      roundedTemp
+    });
+    
     onChartClick(clampedTemp, clampedHumidity);
   };
-
+  
   // Update dimensions when window resizes
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        const containerHeight = containerRef.current.clientHeight || containerWidth * 0.75; // Default aspect ratio if height is not set
+        const isMobile = window.innerWidth <= 768;
         
-        // Make the chart take up the full container width
-        const width = Math.max(containerWidth, 300);
+        // Make the chart responsive while maintaining square shape
+        let size;
         
-        // Calculate height based on available space and desired aspect ratio
-        // Use a slightly taller aspect ratio (4:3) for better visualization
-        const aspectRatio = 4/3;
-        let height;
-        
-        // On larger screens, respect the container height if available
-        if (window.innerWidth > 1100 && containerHeight > 0) {
-          height = containerHeight;
+        if (isMobile) {
+          // On mobile, use the full container width
+          size = containerWidth;
         } else {
-          // Otherwise use the aspect ratio
-          height = Math.max(Math.floor(width / aspectRatio), 300);
+          // On desktop, maintain the capped size
+          size = Math.min(Math.max(containerWidth, 400), 1000); // Min 400px, max 1000px
         }
         
-        setDimensions({ width, height });
+        // For a square chart, width and height are equal
+        setDimensions({ width: size, height: size });
       }
     };
 
@@ -128,79 +139,58 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     };
   }, []);
 
+  // Draw the chart
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
+    
+    // Set canvas dimensions for high DPI displays
+    const pixelRatio = window.devicePixelRatio || 1;
+    canvas.width = dimensions.width * pixelRatio;
+    canvas.height = dimensions.height * pixelRatio;
+    
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
-    // Set canvas dimensions with device pixel ratio for sharp rendering
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = dimensions.width * dpr;
-    canvas.height = dimensions.height * dpr;
     
-    // Apply scaling
-    ctx.scale(dpr, dpr);
-
-    // Set canvas CSS dimensions
+    // Scale all drawing operations by the pixel ratio
+    ctx.scale(pixelRatio, pixelRatio);
+    
+    // Adjust canvas CSS dimensions
     canvas.style.width = `${dimensions.width}px`;
     canvas.style.height = `${dimensions.height}px`;
-
-    const chartWidth = dimensions.width - margin.left - margin.right;
-    const chartHeight = dimensions.height - margin.top - margin.bottom;
-
-    // Calculate font size based on chart dimensions
-    const baseFontSize = Math.max(10, Math.min(14, dimensions.width / 40));
-    const labelFontSize = `${baseFontSize}px Arial`;
-    const titleFontSize = `bold ${Math.max(12, Math.min(16, dimensions.width / 30))}px Arial`;
-
+    
     // Clear canvas
     ctx.clearRect(0, 0, dimensions.width, dimensions.height);
-
-    // Draw background
-    ctx.fillStyle = '#f8f9fa';
-    ctx.fillRect(margin.left, margin.top, chartWidth, chartHeight);
-
-    // Draw background grid - making it lighter and thinner
-    ctx.strokeStyle = '#f0f0f0';
-    ctx.lineWidth = 0.3;
-
-    // Draw vertical grid lines (humidity) - FLIPPED: 100% on left, 0% on right
-    for (let h = 0; h <= 100; h += 10) {
-      // Convert h to flipped position (100-h)
-      const x = margin.left + ((100 - h) / 100) * chartWidth;
-      ctx.beginPath();
-      ctx.moveTo(x, margin.top);
-      ctx.lineTo(x, dimensions.height - margin.bottom);
-      ctx.stroke();
-    }
-
-    // Draw horizontal grid lines (temperature) - FLIPPED: Low temp at top, high temp at bottom
-    const tempStep = tempUnit === 'F' ? 10 : 5;
-    const tempRange = tempUnit === 'F' ? tempRangeF : tempRangeC;
-    for (let t = tempRange.min; t <= tempRange.max; t += tempStep) {
-      // Flip the temperature axis (low temp at top)
-      const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
-      ctx.beginPath();
-      ctx.moveTo(margin.left, y);
-      ctx.lineTo(dimensions.width - margin.right, y);
-      ctx.stroke();
-    }
-
-    // Draw VPD zones - ensure we cover the entire chart area including edges
-    // Use a slightly larger range to ensure complete coverage
-    const tempMin = tempRange.min - 1;
-    const tempMax = tempRange.max + 1;
     
-    for (let t = tempMin; t <= tempMax; t += 1) {
-      for (let h = 0; h <= 101; h += 1) { // Extend to 101 to ensure complete coverage
-        // Flipped X-axis (humidity): 100% on left, 0% on right
-        const x = margin.left + ((100 - h) / 100) * chartWidth;
-        // Flipped Y-axis (temperature): Low temp at top, high temp at bottom
-        const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+    // Chart dimensions
+    const chartWidth = dimensions.width - margin.left - margin.right;
+    const chartHeight = dimensions.height - margin.top - margin.bottom;
+    
+    // Font sizes - scale with chart size
+    const baseFontSize = Math.max(10, Math.min(14, dimensions.width / 40));
+    const labelFontSize = `bold ${baseFontSize}px Arial`;
+    const titleFontSize = `bold ${baseFontSize + 2}px Arial`;
+    
+    // Draw the VPD heatmap
+    const tempRange = tempUnit === 'F' ? tempRangeF : tempRangeC;
+    
+    // Generate the 100x100 heatmap grid
+    // Divide temp range into 100 steps
+    const tempStep = (tempRange.max - tempRange.min) / 100; 
+    
+    for (let hi = 0; hi <= 100; hi++) {
+      const h = hi; // Humidity from 0 to 100%
+      
+      for (let ti = 0; ti <= 100; ti++) {
+        const t = tempRange.min + (ti * tempStep); // Temperature from min to max in 100 steps
         
-        // Skip pixels outside the chart area
+        // Calculate position - FLIPPED AXES
+        // Humidity: 100% on LEFT, 0% on RIGHT
+        // Temperature: Low at TOP, high at BOTTOM
+        const x = margin.left + ((100 - h) / 100) * chartWidth;
+        const y = margin.top + (ti / 100) * chartHeight;
+        
+        // Skip points outside chart area
         if (y > dimensions.height - margin.bottom || y < margin.top) continue;
         if (x > dimensions.width - margin.right || x < margin.left) continue;
         
@@ -211,53 +201,34 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         const vpd = calculateVPD(tempC, clampedHumidity);
         
         // Set color based on VPD value
-        let color = 'rgba(120, 86, 115, 0.8)'; // Purple for under transpiration danger
+        let color = 'rgb(120, 86, 115)'; // Purple for under transpiration danger
          
         if (vpd >= 0.4 && vpd < 0.8) {
-          color = 'rgba(163, 176, 58, 0.8)'; // Lime green for early veg
+          color = 'rgb(163, 176, 58)'; // Lime green for early veg
         } else if (vpd >= 0.8 && vpd < 1.2) {
-          color = 'rgba(87, 135, 53, 0.8)'; // Green for late veg/early flower
+          color = 'rgb(87, 135, 53)'; // Green for late veg/early flower
         } else if (vpd >= 1.2 && vpd < 1.6) {
-          color = 'rgba(244, 187, 74, 0.8)'; // Orange/yellow for mid/late flower
+          color = 'rgb(244, 187, 74)'; // Orange/yellow for mid/late flower
         } else if (vpd >= 1.6) {
-          color = 'rgba(78, 140, 214, 0.8)'; // Blue for over transpiration danger
+          color = 'rgb(78, 140, 214)'; // Blue for over transpiration danger
         }
 
-        // Draw pixel with proper scaling - ensure we cover the entire chart area
-        const pixelWidth = Math.max(1, chartWidth/100) + 0.5;
-        const pixelHeight = Math.max(1, chartHeight/(tempRange.max - tempRange.min)) + 0.5;
+        // Draw pixel with exact size for 100x100 grid
+        const pixelWidth = chartWidth / 100;
+        const pixelHeight = chartHeight / 100;
         
         ctx.fillStyle = color;
         ctx.fillRect(x, y, pixelWidth, pixelHeight);
       }
     }
 
-    // Draw border - after drawing all pixels to ensure it's on top
-    ctx.strokeStyle = '#ccc';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(margin.left, margin.top, chartWidth, chartHeight);
-
-    // Draw axes
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    
-    // Y-axis (temperature) - Left side
-    ctx.moveTo(margin.left, margin.top);
-    ctx.lineTo(margin.left, dimensions.height - margin.bottom);
-    
-    // X-axis (humidity) - Top side
-    ctx.moveTo(margin.left, margin.top);
-    ctx.lineTo(dimensions.width - margin.right, margin.top);
-    ctx.stroke();
-
     // Add labels - now inside the chart with white text
     ctx.font = labelFontSize;
     
     // Temperature labels (Y-axis) - FLIPPED: Low temp at top, high temp at bottom
     ctx.textAlign = 'left';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    for (let t = tempRange.min; t <= tempRange.max; t += tempStep) {
+    ctx.fillStyle = '#000000';
+    for (let t = tempRange.min; t <= tempRange.max; t += tempRange.step) {
       // Flip the temperature axis (low temp at top)
       const y = margin.top + ((t - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
       ctx.fillText(`${t}°${tempUnit}`, margin.left + 5, y + 4);
@@ -271,11 +242,10 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
       ctx.fillText(`${h}%`, x, margin.top + 15);
     }
 
-    // Axis titles - now inside the chart with white text
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+    // Axis titles
+    ctx.fillStyle = '#000000';
     
     // Y-axis title (Temperature) - rotated and positioned inside the chart
-    // Move it further right to avoid overlapping with temperature values
     ctx.save();
     ctx.translate(margin.left + 50, margin.top + chartHeight / 2);
     ctx.rotate(-Math.PI/2);
@@ -304,9 +274,9 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     // Draw point
     ctx.beginPath();
     ctx.arc(currentX, currentY, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#000000';
     ctx.fill();
-    ctx.strokeStyle = '#fff';
+    ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 2;
     ctx.stroke();
 
@@ -316,7 +286,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   }, [airTemp, humidity, tempUnit, dimensions, onChartClick]);
 
   return (
-    <div ref={containerRef} className="vpd-chart" style={{ height: '100%' }}>
+    <div ref={containerRef} className="vpd-chart">
       <canvas 
         ref={canvasRef}
         onClick={handleCanvasClick}

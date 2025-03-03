@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clear Browser Cache</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #e6ffe6;
+      border: 1px solid #b3ffb3;
+    }
+    .error {
+      background-color: #ffeeee;
+      border: 1px solid #ffcccc;
+    }
+    .instructions {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    .instructions h3 {
+      margin-top: 0;
+    }
+    .instructions ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Clear Browser Cache</h1>
+    <p>If you're experiencing issues with the website not loading properly, clearing your browser cache may help.</p>
+    
+    <div class="section">
+      <h2>Automatic Cache Clearing</h2>
+      <p>Click the button below to attempt to clear your browser's cache for this website:</p>
+      <button id="clear-cache-btn">Clear Cache</button>
+      <button id="reload-page-btn">Reload Page</button>
+      <div id="result" class="result"></div>
+    </div>
+    
+    <div class="instructions">
+      <h3>Manual Cache Clearing Instructions</h3>
+      <p>If the automatic method doesn't work, try these manual steps:</p>
+      
+      <h4>Chrome</h4>
+      <ul>
+        <li>Press Ctrl+Shift+Delete (Windows/Linux) or Command+Shift+Delete (Mac)</li>
+        <li>Select "Cached images and files"</li>
+        <li>Click "Clear data"</li>
+      </ul>
+      
+      <h4>Firefox</h4>
+      <ul>
+        <li>Press Ctrl+Shift+Delete (Windows/Linux) or Command+Shift+Delete (Mac)</li>
+        <li>Select "Cache" and ensure other items are unchecked</li>
+        <li>Click "Clear Now"</li>
+      </ul>
+      
+      <h4>Safari</h4>
+      <ul>
+        <li>Go to Safari > Preferences > Advanced</li>
+        <li>Enable "Show Develop menu in menu bar"</li>
+        <li>Go to Develop > Empty Caches</li>
+      </ul>
+      
+      <h4>Edge</h4>
+      <ul>
+        <li>Press Ctrl+Shift+Delete</li>
+        <li>Select "Cached images and files"</li>
+        <li>Click "Clear"</li>
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h2>Test Links</h2>
+      <p>After clearing your cache, try these links:</p>
+      <ul>
+        <li><a href="/" target="_blank">Home Page</a></li>
+        <li><a href="/projects/vpd-calculator" target="_blank">VPD Calculator</a></li>
+        <li><a href="/minimal.html" target="_blank">Minimal React Test</a></li>
+        <li><a href="/react-test.html" target="_blank">React Test Page</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('clear-cache-btn').addEventListener('click', function() {
+      const result = document.getElementById('result');
+      result.className = 'result';
+      result.textContent = 'Attempting to clear cache...';
+      
+      try {
+        // Try to clear application cache (deprecated but might work in some browsers)
+        if (window.applicationCache) {
+          window.applicationCache.addEventListener('updateready', function() {
+            if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+              window.applicationCache.swapCache();
+            }
+          });
+          window.applicationCache.update();
+        }
+        
+        // Try to clear service worker cache
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+        }
+        
+        // Try to clear browser cache using fetch API
+        if (window.caches) {
+          caches.keys().then(function(names) {
+            for (let name of names) {
+              caches.delete(name);
+            }
+          });
+        }
+        
+        // Force reload of assets
+        const timestamp = new Date().getTime();
+        const links = document.querySelectorAll('link[rel="stylesheet"]');
+        const scripts = document.querySelectorAll('script[src]');
+        
+        links.forEach(link => {
+          const url = new URL(link.href);
+          url.searchParams.set('_', timestamp);
+          link.href = url.toString();
+        });
+        
+        scripts.forEach(script => {
+          if (script.src) {
+            const url = new URL(script.src);
+            url.searchParams.set('_', timestamp);
+            script.src = url.toString();
+          }
+        });
+        
+        result.className = 'result success';
+        result.textContent = 'Cache clearing attempts completed. Please reload the page to see if it helped.';
+      } catch (error) {
+        result.className = 'result error';
+        result.textContent = 'Error clearing cache: ' + error.message + '. Please try the manual methods instead.';
+      }
+    });
+    
+    document.getElementById('reload-page-btn').addEventListener('click', function() {
+      // Force reload without cache
+      window.location.reload(true);
+    });
+  </script>
+</body>
+</html> 

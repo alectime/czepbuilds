@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    pre {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    #root-test {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 20px;
+      background-color: #ffffcc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>React Root Test Page</h1>
+    <p>This page tests if the React root element is properly configured.</p>
+    
+    <div class="section">
+      <h2>Root Element Test</h2>
+      <p>The div below has the ID "root" which should match the one React is trying to mount to:</p>
+      <div id="root" style="padding: 20px; border: 1px dashed #999; margin-bottom: 20px;">
+        This is the #root div. If React is working, this text should be replaced.
+      </div>
+      <p>If you see the text above, React is not mounting properly.</p>
+    </div>
+    
+    <div class="section">
+      <h2>Manual React Test</h2>
+      <p>The button below will attempt to manually render something to a test div:</p>
+      <div id="root-test">This is a test div for manual React rendering.</div>
+      <button id="test-button" style="margin-top: 10px; padding: 8px 16px;">Test React Rendering</button>
+    </div>
+    
+    <div class="section">
+      <h2>Console Output</h2>
+      <pre id="console-output">Waiting for console output...</pre>
+    </div>
+  </div>
+
+  <script>
+    // Capture console output
+    const consoleOutput = document.getElementById('console-output');
+    const originalConsole = {
+      log: console.log,
+      error: console.error,
+      warn: console.warn,
+      info: console.info
+    };
+    
+    function captureConsole(type, args) {
+      const message = Array.from(args).map(arg => 
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+      ).join(' ');
+      
+      consoleOutput.textContent += `[${type}] ${message}\n`;
+      return originalConsole[type].apply(console, args);
+    }
+    
+    console.log = function() { return captureConsole('log', arguments); };
+    console.error = function() { return captureConsole('error', arguments); };
+    console.warn = function() { return captureConsole('warn', arguments); };
+    console.info = function() { return captureConsole('info', arguments); };
+    
+    // Log initial information
+    console.log('Test page loaded at: ' + new Date().toLocaleString());
+    console.log('User agent: ' + navigator.userAgent);
+    
+    // Load React and ReactDOM from CDN for testing
+    document.getElementById('test-button').addEventListener('click', function() {
+      console.log('Loading React from CDN...');
+      
+      // Load React
+      const reactScript = document.createElement('script');
+      reactScript.src = 'https://unpkg.com/react@18/umd/react.development.js';
+      reactScript.crossOrigin = '';
+      
+      // Load ReactDOM
+      const reactDOMScript = document.createElement('script');
+      reactDOMScript.src = 'https://unpkg.com/react-dom@18/umd/react-dom.development.js';
+      reactDOMScript.crossOrigin = '';
+      
+      // After React and ReactDOM are loaded, try to render something
+      reactDOMScript.onload = function() {
+        console.log('React and ReactDOM loaded successfully');
+        
+        try {
+          // Create a simple React element
+          const element = React.createElement(
+            'div',
+            { style: { color: 'green', fontWeight: 'bold' } },
+            'This was rendered with React!'
+          );
+          
+          // Render it to the test div
+          const container = document.getElementById('root-test');
+          const root = ReactDOM.createRoot(container);
+          root.render(element);
+          
+          console.log('React test rendering completed successfully');
+        } catch (error) {
+          console.error('Error during React test rendering:', error);
+        }
+      };
+      
+      // Handle loading errors
+      reactScript.onerror = function() {
+        console.error('Failed to load React');
+      };
+      
+      reactDOMScript.onerror = function() {
+        console.error('Failed to load ReactDOM');
+      };
+      
+      // Add scripts to document
+      document.body.appendChild(reactScript);
+      document.body.appendChild(reactDOMScript);
+    });
+    
+    // Try to load the site's JavaScript
+    console.log('Attempting to load the site JavaScript...');
+    const siteScript = document.createElement('script');
+    siteScript.src = '/assets/index-COLVBpuu.js';
+    siteScript.type = 'module';
+    
+    siteScript.onload = function() {
+      console.log('Site JavaScript loaded successfully');
+    };
+    
+    siteScript.onerror = function(error) {
+      console.error('Failed to load site JavaScript:', error);
+    };
+    
+    document.body.appendChild(siteScript);
+  </script>
+</body>
+</html> 

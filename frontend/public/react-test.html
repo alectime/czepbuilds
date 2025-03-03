@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    pre {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    #app {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>React Test Page</h1>
+    <p>This page tests if React can be initialized and render components.</p>
+    
+    <div id="app"></div>
+    
+    <div class="section">
+      <h2>Console Output</h2>
+      <pre id="console-output">Waiting for console output...</pre>
+    </div>
+  </div>
+
+  <!-- Load React and ReactDOM from CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  
+  <script>
+    // Capture console output
+    const consoleOutput = document.getElementById('console-output');
+    const originalConsole = {
+      log: console.log,
+      error: console.error,
+      warn: console.warn,
+      info: console.info
+    };
+    
+    function captureConsole(type, args) {
+      const message = Array.from(args).map(arg => 
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+      ).join(' ');
+      
+      consoleOutput.textContent += `[${type}] ${message}\n`;
+      return originalConsole[type].apply(console, args);
+    }
+    
+    console.log = function() { return captureConsole('log', arguments); };
+    console.error = function() { return captureConsole('error', arguments); };
+    console.warn = function() { return captureConsole('warn', arguments); };
+    console.info = function() { return captureConsole('info', arguments); };
+    
+    // Log initial information
+    console.log('React test page loaded at: ' + new Date().toLocaleString());
+    
+    // Create a simple React component
+    function App() {
+      const [count, setCount] = React.useState(0);
+      
+      return React.createElement(
+        'div',
+        { style: { padding: '20px', border: '1px solid #ddd', borderRadius: '4px' } },
+        React.createElement('h2', null, 'React is working!'),
+        React.createElement('p', null, 'This component was rendered with React.'),
+        React.createElement('p', null, `Count: ${count}`),
+        React.createElement(
+          'button',
+          { 
+            onClick: () => setCount(count + 1),
+            style: { padding: '8px 16px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }
+          },
+          'Increment'
+        )
+      );
+    }
+    
+    // Render the App component
+    try {
+      const container = document.getElementById('app');
+      const root = ReactDOM.createRoot(container);
+      root.render(React.createElement(App));
+      console.log('React component rendered successfully');
+    } catch (error) {
+      console.error('Error rendering React component:', error);
+    }
+    
+    // Try to load the site's JavaScript
+    console.log('Attempting to load the site JavaScript...');
+    const siteScript = document.createElement('script');
+    siteScript.src = '/assets/index-COLVBpuu.js';
+    siteScript.type = 'module';
+    
+    siteScript.onload = function() {
+      console.log('Site JavaScript loaded successfully');
+    };
+    
+    siteScript.onerror = function(error) {
+      console.error('Failed to load site JavaScript:', error);
+    };
+    
+    document.body.appendChild(siteScript);
+  </script>
+</body>
+</html> 
