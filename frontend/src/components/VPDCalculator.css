@@ -15,11 +15,10 @@
 }
 
 .chart-container {
-  flex: 4; /* Increased from 3 to 4 to give more space to the chart */
-  min-width: 350px;
+  flex: 3; /* Reduced from 4 to 3 for better balance */
+  min-width: 300px;
   position: relative;
-  aspect-ratio: 1/1; /* Force a square aspect ratio */
-  max-height: 700px; /* Prevent it from getting too large on very wide screens */
+  height: auto; /* Allow height to be determined by the parent */
   display: flex;
   flex-direction: column;
 }
@@ -27,8 +26,7 @@
 .controls-container {
   flex: 1;
   min-width: 250px;
-  max-width: 350px;
-  height: 100%; /* Take full height of parent */
+  max-width: 300px;
   display: flex;
   flex-direction: column;
 }
@@ -42,6 +40,52 @@
   flex-direction: column;
   gap: 20px;
   height: 100%; /* Take full height of parent */
+}
+
+/* New VPD ranges container */
+.vpd-ranges-container {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.vpd-ranges-panel {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%; /* Take full height of parent */
+}
+
+.vpd-ranges-title {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.vpd-range-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.color-indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.range-text {
+  font-size: 14px;
+  color: #333;
 }
 
 .vpd-result {
@@ -119,7 +163,8 @@
 
 .unit {
   margin-left: 10px;
-  font-weight: bold;
+  font-size: 16px;
+  color: #555;
 }
 
 .vpd-chart {
@@ -136,24 +181,38 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .vpd-layout {
     flex-direction: column;
-    align-items: center;
-    min-height: auto; /* Reset min-height for mobile */
   }
   
   .chart-container {
     width: 100%;
-    max-width: 700px;
-    aspect-ratio: 1/1; /* Maintain square aspect ratio on mobile */
-    min-height: 350px; /* Minimum height for the chart on mobile */
+    max-width: 100%;
+    aspect-ratio: 4/3; /* Wider aspect ratio for smaller screens */
   }
   
-  .controls-container {
+  .controls-container, .vpd-ranges-container {
+    max-width: 100%;
     width: 100%;
-    max-width: 700px;
-    height: auto; /* Allow height to be determined by content */
+  }
+  
+  /* Create a two-column layout for controls and ranges on medium screens */
+  .controls-and-ranges {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+  
+  .controls-container, .vpd-ranges-container {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Stack everything vertically on small screens */
+  .controls-and-ranges {
+    flex-direction: column;
   }
 }
 

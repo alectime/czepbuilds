@@ -92,21 +92,22 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const updateDimensions = () => {
       if (containerRef.current) {
         const containerWidth = containerRef.current.clientWidth;
-        // containerHeight is no longer needed since we're using a square aspect ratio
+        const containerHeight = containerRef.current.clientHeight || containerWidth * 0.75; // Default aspect ratio if height is not set
         
-        // Make the chart take up the full container width with a minimum size
-        const width = Math.max(containerWidth, 350);
+        // Make the chart take up the full container width
+        const width = Math.max(containerWidth, 300);
         
-        // For desktop (wide screens), ensure the chart is square
-        const isWideScreen = window.innerWidth > 900;
+        // Calculate height based on available space and desired aspect ratio
+        // Use a slightly taller aspect ratio (4:3) for better visualization
+        const aspectRatio = 4/3;
         let height;
         
-        if (isWideScreen) {
-          // On desktop, make height equal to width for a square aspect ratio
-          height = width;
+        // On larger screens, respect the container height if available
+        if (window.innerWidth > 1100 && containerHeight > 0) {
+          height = containerHeight;
         } else {
-          // On mobile, use a taller aspect ratio for more vertical space
-          height = Math.max(Math.floor(width * 0.85), 350);
+          // Otherwise use the aspect ratio
+          height = Math.max(Math.floor(width / aspectRatio), 300);
         }
         
         setDimensions({ width, height });
@@ -315,15 +316,14 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   }, [airTemp, humidity, tempUnit, dimensions, onChartClick]);
 
   return (
-    <div ref={containerRef} className="vpd-chart">
+    <div ref={containerRef} className="vpd-chart" style={{ height: '100%' }}>
       <canvas 
         ref={canvasRef}
         onClick={handleCanvasClick}
         style={{
           display: 'block',
           width: '100%',
-          height: '100%',
-          flex: '1'
+          height: '100%'
         }}
       />
     </div>

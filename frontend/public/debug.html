@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #e6ffe6;
+      border-color: #b3ffb3;
+    }
+    .error {
+      background-color: #ffeeee;
+      border-color: #ffcccc;
+    }
+    .pending {
+      background-color: #ffffcc;
+      border-color: #ffffaa;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #555;
+      margin-top: 0;
+    }
+    pre {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Debug Page for czepbuilds.com</h1>
+    <p>This page runs various tests to help diagnose website loading issues.</p>
+    
+    <div id="csp-test" class="section pending">
+      <h2>Content Security Policy Test</h2>
+      <div id="csp-result">Testing CSP compatibility...</div>
+    </div>
+    
+    <div id="js-load-test" class="section pending">
+      <h2>JavaScript Loading Test</h2>
+      <div id="js-result">Testing main JavaScript file loading...</div>
+    </div>
+    
+    <div id="css-load-test" class="section pending">
+      <h2>CSS Loading Test</h2>
+      <div id="css-result">Testing main CSS file loading...</div>
+    </div>
+    
+    <div id="network-test" class="section pending">
+      <h2>Network Connectivity Test</h2>
+      <div id="network-result">Testing network connectivity...</div>
+    </div>
+    
+    <div id="browser-info" class="section">
+      <h2>Browser Information</h2>
+      <pre id="browser-details"></pre>
+    </div>
+    
+    <div id="console-log" class="section">
+      <h2>Console Log</h2>
+      <pre id="log-output">Capturing console output...</pre>
+    </div>
+    
+    <button id="run-tests">Run All Tests Again</button>
+  </div>
+  
+  <script>
+    // Capture console output
+    const logOutput = document.getElementById('log-output');
+    const originalConsole = {
+      log: console.log,
+      error: console.error,
+      warn: console.warn,
+      info: console.info
+    };
+    
+    function captureLog(type, args) {
+      const message = Array.from(args).map(arg => 
+        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+      ).join(' ');
+      
+      logOutput.textContent += `[${type}] ${message}\n`;
+      return originalConsole[type].apply(console, args);
+    }
+    
+    console.log = function() { return captureLog('log', arguments); };
+    console.error = function() { return captureLog('error', arguments); };
+    console.warn = function() { return captureLog('warn', arguments); };
+    console.info = function() { return captureLog('info', arguments); };
+    
+    // Display browser information
+    const browserDetails = document.getElementById('browser-details');
+    browserDetails.textContent = `
+User Agent: ${navigator.userAgent}
+Platform: ${navigator.platform}
+Cookies Enabled: ${navigator.cookieEnabled}
+Language: ${navigator.language}
+Online: ${navigator.onLine}
+Screen Resolution: ${window.screen.width}x${window.screen.height}
+Window Size: ${window.innerWidth}x${window.innerHeight}
+    `;
+    
+    // Test functions
+    function updateSectionStatus(id, status, message) {
+      const section = document.getElementById(id);
+      section.className = `section ${status}`;
+      document.getElementById(`${id}-result`).innerHTML = message;
+    }
+    
+    function testCSP() {
+      try {
+        // Test if inline script works (should work with 'unsafe-inline')
+        const testScript = document.createElement('script');
+        testScript.textContent = "document.getElementById('csp-inline-test').textContent = 'Inline script executed successfully';";
+        document.body.appendChild(testScript);
+        
+        // Test if eval works (should work with 'unsafe-eval')
+        const evalResult = eval('1 + 1');
+        
+        const testDiv = document.createElement('div');
+        testDiv.id = 'csp-inline-test';
+        testDiv.textContent = 'Inline script test pending...';
+        document.getElementById('csp-result').appendChild(testDiv);
+        
+        setTimeout(() => {
+          const inlineResult = document.getElementById('csp-inline-test').textContent;
+          if (inlineResult === 'Inline script executed successfully' && evalResult === 2) {
+            updateSectionStatus('csp-test', 'success', 'CSP test passed: Both inline scripts and eval are working.');
+          } else {
+            updateSectionStatus('csp-test', 'error', 'CSP test failed: Inline scripts or eval not working properly.');
+          }
+        }, 500);
+      } catch (e) {
+        updateSectionStatus('csp-test', 'error', `CSP test error: ${e.message}`);
+      }
+    }
+    
+    function testJSLoading() {
+      try {
+        const script = document.createElement('script');
+        script.src = '/assets/index-Qcg3De7X.js';
+        script.type = 'module';
+        script.onload = function() {
+          updateSectionStatus('js-load-test', 'success', 'Main JavaScript file loaded successfully!');
+        };
+        script.onerror = function(e) {
+          updateSectionStatus('js-load-test', 'error', `Failed to load main JavaScript file: ${e.type}`);
+          console.error('JS load error:', e);
+        };
+        document.body.appendChild(script);
+      } catch (e) {
+        updateSectionStatus('js-load-test', 'error', `JavaScript loading error: ${e.message}`);
+      }
+    }
+    
+    function testCSSLoading() {
+      try {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/assets/index-m1gblEQ0.css';
+        link.onload = function() {
+          updateSectionStatus('css-load-test', 'success', 'Main CSS file loaded successfully!');
+        };
+        link.onerror = function(e) {
+          updateSectionStatus('css-load-test', 'error', `Failed to load main CSS file: ${e.type}`);
+          console.error('CSS load error:', e);
+        };
+        document.head.appendChild(link);
+      } catch (e) {
+        updateSectionStatus('css-load-test', 'error', `CSS loading error: ${e.message}`);
+      }
+    }
+    
+    function testNetworkConnectivity() {
+      try {
+        const startTime = performance.now();
+        fetch('/index.html', { method: 'HEAD' })
+          .then(response => {
+            const endTime = performance.now();
+            const latency = Math.round(endTime - startTime);
+            if (response.ok) {
+              updateSectionStatus('network-test', 'success', 
+                `Network connectivity test passed. Status: ${response.status}, Latency: ${latency}ms`);
+            } else {
+              updateSectionStatus('network-test', 'error', 
+                `Network connectivity test failed. Status: ${response.status}, Latency: ${latency}ms`);
+            }
+          })
+          .catch(error => {
+            updateSectionStatus('network-test', 'error', `Network connectivity error: ${error.message}`);
+          });
+      } catch (e) {
+        updateSectionStatus('network-test', 'error', `Network test error: ${e.message}`);
+      }
+    }
+    
+    function runAllTests() {
+      // Reset all test sections
+      document.querySelectorAll('.section').forEach(section => {
+        if (section.id !== 'browser-info' && section.id !== 'console-log') {
+          section.className = 'section pending';
+        }
+      });
+      
+      // Clear log
+      logOutput.textContent = 'Capturing console output...\n';
+      
+      // Run tests
+      testCSP();
+      testJSLoading();
+      testCSSLoading();
+      testNetworkConnectivity();
+    }
+    
+    // Run tests on page load
+    window.addEventListener('load', runAllTests);
+    
+    // Run tests again when button is clicked
+    document.getElementById('run-tests').addEventListener('click', runAllTests);
+  </script>
+</body>
+</html> 
