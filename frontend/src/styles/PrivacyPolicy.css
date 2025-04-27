@@ -4,8 +4,8 @@
   width: 100%;
   min-height: 100vh;
   padding: 2rem 1rem;
-  background-color: var(--background-color, #ffffff);
-  color: var(--text-color, #333333);
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .privacy-policy {
@@ -17,20 +17,20 @@
 .privacy-policy h1 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  color: var(--heading-color, #1a1a1a);
+  color: var(--text-color);
 }
 
 .privacy-policy .effective-date {
   font-style: italic;
   margin-bottom: 2rem;
-  color: var(--secondary-text-color, #666666);
+  color: var(--text-muted);
 }
 
 .privacy-policy h2 {
   font-size: 1.8rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
-  color: var(--heading-color, #1a1a1a);
+  color: var(--text-color);
 }
 
 .privacy-policy p {
@@ -50,38 +50,17 @@
 }
 
 .privacy-policy a {
-  color: var(--link-color, #0066cc);
+  color: var(--color-primary);
   text-decoration: none;
 }
 
 .privacy-policy a:hover {
   text-decoration: underline;
+  color: var(--color-accent);
 }
 
 .privacy-policy section {
   margin-bottom: 2rem;
-}
-
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #121212;
-    --text-color: #e0e0e0;
-    --heading-color: #ffffff;
-    --secondary-text-color: #aaaaaa;
-    --link-color: #66b2ff;
-  }
-}
-
-/* Light mode styles */
-@media (prefers-color-scheme: light) {
-  :root {
-    --background-color: #ffffff;
-    --text-color: #222222;
-    --heading-color: #000000;
-    --secondary-text-color: #444444;
-    --link-color: #0055aa;
-  }
 }
 
 /* Responsive adjustments */
