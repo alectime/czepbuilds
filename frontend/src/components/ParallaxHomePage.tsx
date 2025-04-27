@@ -326,7 +326,7 @@ const ParallaxHomePage = () => {
                 Email Us
               </a>
               <a 
-                href="https://linkedin.com/in/czepbuilds" 
+                href="https://www.linkedin.com/in/alec-czepiel" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 style={{
