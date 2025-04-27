@@ -54,7 +54,7 @@ const Header = () => {
             <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
             <li><Link to="/projects" onClick={() => setIsMenuOpen(false)}>Projects</Link></li>
             <li><Link to="/media" onClick={() => setIsMenuOpen(false)}>Media</Link></li>
-            <li><a href="#about" onClick={() => setIsMenuOpen(false)}>About</a></li>
+            <li><Link to="/about" onClick={() => setIsMenuOpen(false)}>About</Link></li>
             <li><a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a></li>
           </ul>
         </nav>
