@@ -75,23 +75,6 @@ const ParallaxHomePage = () => {
         {/* Hero Section */}
         <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginBottom: '6rem' }}>
           <div style={{ maxWidth: '768px', margin: '0 auto', textAlign: 'center' }}>
-            <span 
-              className="animate-fade-in" 
-              style={{ 
-                display: 'inline-block', 
-                fontSize: '0.875rem', 
-                fontWeight: 500, 
-                color: 'var(--text-color, #123524)', 
-                letterSpacing: '0.05em', 
-                textTransform: 'uppercase',
-                opacity: 0,
-                animationDelay: '0.3s',
-                animationFillMode: 'forwards',
-                transition: 'color 0.3s ease'
-              }}
-            >
-              Welcome to Czep Builds
-            </span>
             <h1 
               className="animate-fade-in" 
               style={{ 
