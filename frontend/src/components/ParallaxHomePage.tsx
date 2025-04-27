@@ -148,7 +148,7 @@ const ParallaxHomePage = () => {
                 View Portfolio
               </a>
               <a 
-                href="#contact" 
+                href="#about" 
                 style={{
                   padding: '0.75rem 1.5rem',
                   backgroundColor: 'transparent',
@@ -279,35 +279,12 @@ const ParallaxHomePage = () => {
             }}>
               Have an idea or project related to sustainability, agriculture, or technology integration? Let's connect and explore how we can build innovative solutions together.
             </p>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginTop: '6rem' }}>
-          <div className="opacity-0 reveal" style={{ maxWidth: '768px', margin: '0 auto' }}>
-            <h2 style={{ 
-              fontSize: '1.5rem', 
-              fontWeight: 500, 
-              marginBottom: '1.5rem', 
-              color: 'var(--text-color, #080806)',
-              transition: 'color 0.3s ease'
-            }}>
-              Get in Touch
-            </h2>
-            <p style={{ 
-              color: 'var(--text-muted, #333333)', 
-              lineHeight: 1.7, 
-              marginBottom: '2rem',
-              transition: 'color 0.3s ease'
-            }}>
-              Interested in working together? Have questions about our services? 
-              We'd love to hear from you. Reach out through any of the channels below.
-            </p>
             <div style={{ 
               display: 'flex', 
               flexDirection: 'column', 
               gap: '1rem',
-              alignItems: 'center'
+              alignItems: 'center',
+              marginTop: '2rem'
             }}>
               <a 
                 href="mailto:contact@czepbuilds.com" 
