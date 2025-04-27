@@ -6,7 +6,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import MediaShowcase from './pages/MediaShowcase';
 import SporeLink from './pages/SporeLink';
 import CEABuilds from './pages/CEABuilds';
-import VPDCalculatorPage from './components/VPDCalculatorPage';
+import { VPDCalculatorPage } from './features/vpd-calculator';
 import HoyaDesigns from './pages/HoyaDesigns';
 import ParallaxHomePage from './components/ParallaxHomePage';
 

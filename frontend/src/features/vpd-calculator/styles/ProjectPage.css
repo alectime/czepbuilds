@@ -1,0 +1,110 @@
+.project-page {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.project-content {
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.project-section {
+  margin: 3rem 0;
+  padding: 0 1rem;
+}
+
+/* VPD Calculator Container */
+.calculator-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* VPD Calculator Layout */
+.calculator-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-start;
+  margin: 2rem 0;
+  width: 100%;
+}
+
+.vpd-visualization {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.vpd-chart {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.vpd-chart canvas {
+  max-width: 100%;
+  height: auto !important;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* VPD Result Styling */
+.vpd-result {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #6c757d;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.vpd-low {
+  border-left-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.vpd-early-veg {
+  border-left-color: #2ecc71;
+  background-color: rgba(46, 204, 113, 0.1);
+}
+
+.vpd-late-veg {
+  border-left-color: #f1c40f;
+  background-color: rgba(241, 196, 15, 0.1);
+}
+
+.vpd-flower {
+  border-left-color: #e67e22;
+  background-color: rgba(230, 126, 34, 0.1);
+}
+
+.vpd-high {
+  border-left-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Media query for mobile */
+@media (max-width: 768px) {
+  .calculator-layout {
+    flex-direction: column;
+  }
+  
+  .vpd-chart {
+    max-width: 100%;
+  }
+} 

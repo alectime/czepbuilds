@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { calculateVPD } from '../utils/vpdCalculations';
 import VPDVisualization from './VPDVisualization';
-import './VPDCalculator.css';
+import '../styles/VPDCalculator.css';
 
 const VPDCalculator: React.FC = () => {
   const [airTemp, setAirTemp] = useState<number>(75);

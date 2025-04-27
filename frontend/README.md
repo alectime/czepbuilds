@@ -1,54 +1,84 @@
-# React + TypeScript + Vite
+# CzepBuilds Portfolio Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+This is the frontend for the CzepBuilds portfolio website, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+frontend/
+├── public/              # Static assets
+├── src/                 # Source code
+│   ├── components/      # Shared UI components
+│   ├── features/        # Feature-specific code
+│   │   └── vpd-calculator/  # VPD Calculator feature
+│   │       ├── components/  # React components
+│   │       ├── styles/      # CSS styles
+│   │       ├── utils/       # Utility functions
+│   │       └── index.ts     # Feature exports
+│   ├── firebase/        # Firebase configuration
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utility libraries
+│   ├── pages/           # Page components
+│   ├── parallax-design/ # Parallax UI components
+│   ├── styles/          # Global styles
+│   ├── utils/           # Utility functions
+│   ├── App.tsx          # Main App component
+│   └── main.tsx         # Entry point
+└── vite.config.ts       # Vite configuration
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Features
+- **Parallax Home Page**: Interactive project showcase with parallax scrolling
+- **VPD Calculator**: Vapor Pressure Deficit calculator for controlled environment agriculture
+- **Media Showcase**: Gallery of media items
+- **Project Pages**: Detailed pages for various projects
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Getting Started
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+### Prerequisites
+- Node.js (v14+)
+- npm or yarn
+
+### Installation
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## Feature Development Guidelines
+
+### Adding New Features
+New features should be organized in their own directory under `src/features/` with the following structure:
+
+```
+features/
+└── feature-name/
+    ├── components/      # React components
+    ├── styles/          # CSS styles
+    ├── utils/           # Utility functions
+    ├── hooks/           # Feature-specific hooks (if needed)
+    ├── types/           # TypeScript types (if needed)
+    ├── README.md        # Feature documentation
+    └── index.ts         # Exports
+```
+
+### Code Style Guidelines
+- Use functional components with hooks
+- Follow TypeScript best practices
+- Keep components small and focused
+- Use CSS modules or scoped CSS
+
+## Deployment
+The site is deployed through Firebase Hosting.
+
+```bash
+# Deploy to Firebase
+npm run deploy
 ```

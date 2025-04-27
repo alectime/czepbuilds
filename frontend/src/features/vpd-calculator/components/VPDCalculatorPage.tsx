@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import VPDCalculator from './VPDCalculator';
-import '../styles/ProjectPage.css'; // Reusing project page styling for consistency
+import '../styles/ProjectPage.css';
 
 const VPDCalculatorPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);

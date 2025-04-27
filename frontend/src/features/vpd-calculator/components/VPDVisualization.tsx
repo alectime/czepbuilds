@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { calculateVPD } from '../utils/vpdCalculations';
 
 interface VPDVisualizationProps {
@@ -36,18 +36,18 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
 
-  // Define temperature range (32°F to 122°F or 0°C to 50°C)
-  const tempRangeF = {
+  // Define temperature ranges with useMemo to prevent unnecessary re-renders
+  const tempRangeF = useMemo(() => ({
     min: 32,
     max: 122,
     step: 10
-  };
+  }), []);
   
-  const tempRangeC = {
+  const tempRangeC = useMemo(() => ({
     min: 0,
     max: 50,
     step: 5
-  };
+  }), []);
 
   // Handle canvas click
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -279,7 +279,19 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     // Add cursor style to indicate clickable area
     canvas.style.cursor = onChartClick ? 'pointer' : 'default';
 
-  }, [airTemp, humidity, tempUnit, dimensions, onChartClick]);
+  }, [
+    airTemp, 
+    humidity, 
+    tempUnit, 
+    dimensions, 
+    onChartClick, 
+    margin.top,
+    margin.right,
+    margin.bottom,
+    margin.left,
+    tempRangeF,
+    tempRangeC
+  ]);
 
   return (
     <div ref={containerRef} className="vpd-chart">

@@ -4,6 +4,11 @@ import { db } from '../firebase/config';
 import { v4 as uuidv4 } from 'uuid';
 import '../styles/SecureSubscribeForm.css';
 
+// Check if Firestore is available
+const isFirestoreAvailable = () => {
+  return db && typeof db === 'object' && Object.keys(db).length > 0;
+};
+
 // Regular expression for email validation
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -71,6 +76,25 @@ const SecureSubscribeForm = () => {
       
       // Generate a unique ID for the subscription
       const subscriptionId = uuidv4();
+      
+      // Check if Firestore is available
+      if (!isFirestoreAvailable()) {
+        console.warn('Firestore is not available. Using mock functionality.');
+        // Simulate successful submission for development
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Successful submission (mock)
+        setFormStatus({
+          type: 'success',
+          message: 'Thank you! You have been subscribed successfully. (Development Mode)',
+        });
+        setEmail('');
+        
+        // Generate new CSRF token for next submission
+        setCsrfToken(uuidv4());
+        setIsSubmitting(false);
+        return;
+      }
       
       // Add to Firestore with security measures
       await setDoc(doc(db, 'subscriptions', subscriptionId), {
