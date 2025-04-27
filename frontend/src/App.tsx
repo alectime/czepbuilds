@@ -9,6 +9,7 @@ import CEABuilds from './pages/CEABuilds';
 import { VPDCalculatorPage } from './features/vpd-calculator';
 import HoyaDesigns from './pages/HoyaDesigns';
 import ParallaxHomePage from './components/ParallaxHomePage';
+import Projects from './pages/Projects';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<ParallaxHomePage />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/media" element={<MediaShowcase />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/projects/spore-link" element={<SporeLink />} />
