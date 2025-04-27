@@ -150,18 +150,6 @@ const ParallaxHomePage = () => {
         
         {/* Projects Grid */}
         <section id="projects" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginBottom: '6rem' }}>
-          <h2 
-            className="opacity-0 reveal" 
-            style={{ 
-              fontSize: '1.5rem', 
-              fontWeight: 500, 
-              marginBottom: '3rem',
-              color: 'var(--text-color, #080806)',
-              transition: 'color 0.3s ease'
-            }}
-          >
-            Projects
-          </h2>
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
