@@ -30,7 +30,15 @@ const About = () => {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color, #f7f7f2)', transition: 'background-color 0.3s ease' }}>
       <main style={{ paddingTop: '7rem', paddingBottom: '4rem' }}>
         {/* About Section */}
-        <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
+        <section style={{ 
+          padding: '3rem 1rem', 
+          margin: '0 auto',
+          maxWidth: '1200px',
+          backgroundColor: 'var(--bg-color-secondary, rgba(18, 53, 36, 0.1))',
+          borderRadius: '12px',
+          boxShadow: 'var(--box-shadow, 0 4px 6px rgba(8, 8, 6, 0.1))',
+          transition: 'background-color 0.3s ease, box-shadow 0.3s ease'
+        }}>
           <div className="opacity-0 reveal" style={{ maxWidth: '768px', margin: '0 auto' }}>
             <h1 style={{ 
               fontSize: '2rem', 
@@ -57,28 +65,36 @@ const About = () => {
             }}>
               My recent projects include creating open-source IoT tools for soil moisture monitoring, designing automated growing systems for urban agriculture, and developing user friendly web platforms to manage and optimize crop production. My goal is to bridge the gap between online technologies and tangible, impactful solutions in agriculture and sustainability.
             </p>
-            <h3 style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: 500, 
-              marginTop: '2rem', 
-              marginBottom: '1rem',
-              color: 'var(--text-color, #080806)',
-              transition: 'color 0.3s ease'
+            <div style={{
+              marginTop: '2.5rem',
+              padding: '2rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '8px',
+              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.3s ease'
             }}>
-              Core Skills & Interests:
-            </h3>
-            <ul style={{ 
-              color: 'var(--text-muted, #333333)', 
-              lineHeight: 1.7, 
-              marginBottom: '1rem', 
-              paddingLeft: '1.5rem',
-              listStyle: 'disc',
-              transition: 'color 0.3s ease'
-            }}>
-              <li>Full-Stack Web Development: Building intuitive, interactive digital interfaces that support real world applications.</li>
-              <li>Controlled Environment Agriculture: Designing automated systems for optimized growth conditions in greenhouses and indoor farms.</li>
-              <li>IoT & Hardware Integration: Developing affordable, accessible sensor systems to enhance monitoring and automation in agriculture.</li>
-            </ul>
+              <h3 style={{ 
+                fontSize: '1.25rem', 
+                fontWeight: 500, 
+                marginBottom: '1rem',
+                color: 'var(--text-color, #080806)',
+                transition: 'color 0.3s ease'
+              }}>
+                Core Skills & Interests:
+              </h3>
+              <ul style={{ 
+                color: 'var(--text-muted, #333333)', 
+                lineHeight: 1.7, 
+                marginBottom: '1rem', 
+                paddingLeft: '1.5rem',
+                listStyle: 'disc',
+                transition: 'color 0.3s ease'
+              }}>
+                <li>Full-Stack Web Development: Building intuitive, interactive digital interfaces that support real world applications.</li>
+                <li>Controlled Environment Agriculture: Designing automated systems for optimized growth conditions in greenhouses and indoor farms.</li>
+                <li>IoT & Hardware Integration: Developing affordable, accessible sensor systems to enhance monitoring and automation in agriculture.</li>
+              </ul>
+            </div>
             <h3 style={{ 
               fontSize: '1.25rem', 
               fontWeight: 500, 
