@@ -3,19 +3,17 @@ import '../styles/ParallaxHomePage.css';
 
 // Import the ParallaxTile component
 import ParallaxTile from '../parallax-design/ParallaxTile';
-// Import video asset
-import sporeLinkDemo from '../assets/videos/sporelink-demo.mp4';
 
 const ParallaxHomePage = () => {
   // Updated projects data with real image URLs
   const projects = [
     {
       id: 1,
-      title: 'Spore Link',
+      title: 'Pure Harbor Naturals and Spore Link',
       description: 'A comprehensive platform connecting mycology enthusiasts with cultivation resources, strain databases, and community knowledge sharing.',
       category: 'Web Development',
       image: 'https://images.unsplash.com/photo-1516044734145-07ca8eef8731?q=80&w=1000&auto=format&fit=crop',
-      projectLink: '/projects/spore-link',
+      projectLink: 'https://pureharbornaturals.com/',
       repoLink: '#'
     },
     {
@@ -47,14 +45,6 @@ const ParallaxHomePage = () => {
     }
   ];
 
-  // Function to scroll to contact section
-  const scrollToContact = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   useEffect(() => {
     // Reveal animations on scroll
     const observerOptions = {
@@ -81,141 +71,92 @@ const ParallaxHomePage = () => {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color, #f7f7f2)', transition: 'background-color 0.3s ease' }}>
-      <main style={{ paddingTop: '0', paddingBottom: '4rem' }}>
-        {/* Hero Section - 2-column layout */}
-        <section 
-          style={{ 
-            height: '85vh', 
-            background: 'linear-gradient(to bottom, #0f172a, #1e293b)',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 1rem'
-          }}
-        >
-          <div
-            style={{
-              maxWidth: '1200px',
-              margin: '0 auto',
-              width: '100%',
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '2rem'
-            }}
-          >
-            {/* Left Column */}
-            <div
-              style={{
-                flex: '1',
-                minWidth: '300px',
-                color: 'white',
-                padding: '2rem'
+      <main style={{ paddingTop: '7rem', paddingBottom: '4rem' }}>
+        {/* Hero Section */}
+        <section style={{ 
+          backgroundColor: 'var(--bg-color-secondary, rgba(18, 53, 36, 0.1))', 
+          padding: '3rem 1rem', 
+          marginBottom: '6rem',
+          borderRadius: '12px',
+          boxShadow: 'var(--box-shadow, 0 4px 6px rgba(8, 8, 6, 0.1))',
+          transition: 'background-color 0.3s ease, box-shadow 0.3s ease'
+        }}>
+          <div style={{ maxWidth: '768px', margin: '0 auto', textAlign: 'center' }}>
+            <h1 
+              className="animate-fade-in" 
+              style={{ 
+                fontSize: 'clamp(2.5rem, 5vw, 4rem)', 
+                fontWeight: 300, 
+                letterSpacing: '-0.025em',
+                marginTop: '1rem',
+                opacity: 0,
+                animationDelay: '0.5s',
+                animationFillMode: 'forwards',
+                color: 'var(--text-color, #080806)',
+                transition: 'color 0.3s ease'
               }}
             >
-              <h1 
-                className="animate-fade-in" 
-                style={{ 
-                  fontSize: 'clamp(2.5rem, 5vw, 4rem)', 
-                  fontWeight: 600, 
-                  letterSpacing: '-0.025em',
-                  marginTop: '1rem',
-                  marginBottom: '1.5rem',
-                  opacity: 0,
-                  animationDelay: '0.5s',
-                  animationFillMode: 'forwards',
-                  color: 'white',
-                  lineHeight: '1.2'
-                }}
-              >
-                I build hardware-aware web apps & CEA tools.
-              </h1>
-              <p 
-                className="animate-fade-in" 
-                style={{ 
-                  fontSize: '1.25rem', 
-                  color: '#e2e8f0', 
-                  marginBottom: '2rem',
-                  opacity: 0,
-                  animationDelay: '0.7s',
-                  animationFillMode: 'forwards',
-                  lineHeight: '1.6'
-                }}
-              >
-                Bridging IoT sensors with delightful user interfaces.
-              </p>
-              <div 
-                className="animate-fade-in" 
-                style={{ 
-                  opacity: 0,
-                  animationDelay: '0.9s',
-                  animationFillMode: 'forwards'
-                }}
-              >
-                <button 
-                  onClick={scrollToContact} 
-                  style={{
-                    padding: '0.75rem 1.75rem',
-                    backgroundColor: '#10b981',
-                    color: 'white',
-                    borderRadius: '0.375rem',
-                    border: 'none',
-                    fontWeight: '500',
-                    fontSize: '1.125rem',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.3s',
-                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#059669'}
-                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
-                >
-                  Get in Touch
-                </button>
-              </div>
-            </div>
-
-            {/* Right Column - Video */}
-            <div
-              style={{
-                flex: '1',
-                minWidth: '300px',
-                padding: '2rem',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
+              Engineering Sustainable Futures with Digital and Physical Solutions
+            </h1>
+            <p 
+              className="animate-fade-in" 
+              style={{ 
+                fontSize: '1.125rem', 
+                color: 'var(--text-muted, #333333)', 
+                marginTop: '1.5rem',
+                opacity: 0,
+                animationDelay: '0.7s',
+                animationFillMode: 'forwards',
+                transition: 'color 0.3s ease'
               }}
-              className="animate-fade-in"
             >
-              <div
+              Bridging web development, controlled environment agriculture, and IoT technologies to create smarter, greener, and more efficient systems.
+            </p>
+            <div 
+              className="animate-fade-in" 
+              style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                gap: '1rem', 
+                marginTop: '2rem',
+                opacity: 0,
+                animationDelay: '0.9s',
+                animationFillMode: 'forwards'
+              }}
+            >
+              <a 
+                href="#projects" 
                 style={{
-                  width: '100%',
-                  maxWidth: '600px',
-                  height: 'auto',
-                  borderRadius: '0.5rem',
-                  overflow: 'hidden',
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                  opacity: 0,
-                  animationDelay: '1.1s',
-                  animationFillMode: 'forwards'
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#123524',
+                  color: '#f7f7f2',
+                  borderRadius: '0.375rem',
+                  transition: 'background-color 0.3s, color 0.3s',
+                  textDecoration: 'none',
                 }}
               >
-                <video 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                >
-                  <source src={sporeLinkDemo} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
+                View Portfolio
+              </a>
+              <a 
+                href="#about" 
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: 'transparent',
+                  color: 'var(--text-color, #123524)',
+                  border: '1px solid #123524',
+                  borderRadius: '0.375rem',
+                  transition: 'background-color 0.3s, color 0.3s, border-color 0.3s',
+                  textDecoration: 'none',
+                }}
+              >
+                Get in Touch
+              </a>
             </div>
           </div>
         </section>
         
         {/* Projects Grid */}
-        <section id="projects" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginTop: '6rem', marginBottom: '6rem' }}>
+        <section id="projects" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginBottom: '6rem' }}>
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
@@ -250,7 +191,14 @@ const ParallaxHomePage = () => {
         </section>
         
         {/* About Section */}
-        <section id="about" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
+        <section id="about" style={{ 
+          padding: '3rem 1rem', 
+          marginBottom: '6rem',
+          backgroundColor: 'var(--bg-color-secondary, rgba(18, 53, 36, 0.1))',
+          borderRadius: '12px',
+          boxShadow: 'var(--box-shadow, 0 4px 6px rgba(8, 8, 6, 0.1))',
+          transition: 'background-color 0.3s ease, box-shadow 0.3s ease'
+        }}>
           <div className="opacity-0 reveal" style={{ maxWidth: '768px', margin: '0 auto' }}>
             <h2 style={{ 
               fontSize: '1.5rem', 
@@ -277,28 +225,36 @@ const ParallaxHomePage = () => {
             }}>
               My recent projects include creating open-source IoT tools for soil moisture monitoring, designing automated growing systems for urban agriculture, and developing user friendly web platforms to manage and optimize crop production. My goal is to bridge the gap between online technologies and tangible, impactful solutions in agriculture and sustainability.
             </p>
-            <h3 style={{ 
-              fontSize: '1.25rem', 
-              fontWeight: 500, 
-              marginTop: '2rem', 
-              marginBottom: '1rem',
-              color: 'var(--text-color, #080806)',
-              transition: 'color 0.3s ease'
+            <div style={{
+              marginTop: '2.5rem',
+              padding: '2rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '8px',
+              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.1)',
+              transition: 'background-color 0.3s ease'
             }}>
-              Core Skills & Interests:
-            </h3>
-            <ul style={{ 
-              color: 'var(--text-muted, #333333)', 
-              lineHeight: 1.7, 
-              marginBottom: '1rem', 
-              paddingLeft: '1.5rem',
-              listStyle: 'disc',
-              transition: 'color 0.3s ease'
-            }}>
-              <li>Full-Stack Web Development: Building intuitive, interactive digital interfaces that support real world applications.</li>
-              <li>Controlled Environment Agriculture: Designing automated systems for optimized growth conditions in greenhouses and indoor farms.</li>
-              <li>IoT & Hardware Integration: Developing affordable, accessible sensor systems to enhance monitoring and automation in agriculture.</li>
-            </ul>
+              <h3 style={{ 
+                fontSize: '1.25rem', 
+                fontWeight: 500, 
+                marginBottom: '1rem',
+                color: 'var(--text-color, #080806)',
+                transition: 'color 0.3s ease'
+              }}>
+                Core Skills & Interests:
+              </h3>
+              <ul style={{ 
+                color: 'var(--text-muted, #333333)', 
+                lineHeight: 1.7, 
+                marginBottom: '1rem', 
+                paddingLeft: '1.5rem',
+                listStyle: 'disc',
+                transition: 'color 0.3s ease'
+              }}>
+                <li>Full-Stack Web Development: Building intuitive, interactive digital interfaces that support real world applications.</li>
+                <li>Controlled Environment Agriculture: Designing automated systems for optimized growth conditions in greenhouses and indoor farms.</li>
+                <li>IoT & Hardware Integration: Developing affordable, accessible sensor systems to enhance monitoring and automation in agriculture.</li>
+              </ul>
+            </div>
             <h3 style={{ 
               fontSize: '1.25rem', 
               fontWeight: 500, 
@@ -336,7 +292,6 @@ const ParallaxHomePage = () => {
                   width: '100%',
                   maxWidth: '300px',
                 }}
-                id="contact"
               >
                 Email Us
               </a>
