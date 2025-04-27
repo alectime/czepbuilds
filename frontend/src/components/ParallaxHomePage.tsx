@@ -3,6 +3,8 @@ import '../styles/ParallaxHomePage.css';
 
 // Import the ParallaxTile component
 import ParallaxTile from '../parallax-design/ParallaxTile';
+// Import video asset
+import sporeLinkDemo from '../assets/videos/sporelink-demo.mp4';
 
 const ParallaxHomePage = () => {
   // Updated projects data with real image URLs
@@ -45,6 +47,14 @@ const ParallaxHomePage = () => {
     }
   ];
 
+  // Function to scroll to contact section
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     // Reveal animations on scroll
     const observerOptions = {
@@ -71,85 +81,141 @@ const ParallaxHomePage = () => {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color, #f7f7f2)', transition: 'background-color 0.3s ease' }}>
-      <main style={{ paddingTop: '7rem', paddingBottom: '4rem' }}>
-        {/* Hero Section */}
-        <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginBottom: '6rem' }}>
-          <div style={{ maxWidth: '768px', margin: '0 auto', textAlign: 'center' }}>
-            <h1 
-              className="animate-fade-in" 
-              style={{ 
-                fontSize: 'clamp(2.5rem, 5vw, 4rem)', 
-                fontWeight: 300, 
-                letterSpacing: '-0.025em',
-                marginTop: '1rem',
-                opacity: 0,
-                animationDelay: '0.5s',
-                animationFillMode: 'forwards',
-                color: 'var(--text-color, #080806)',
-                transition: 'color 0.3s ease'
+      <main style={{ paddingTop: '0', paddingBottom: '4rem' }}>
+        {/* Hero Section - 2-column layout */}
+        <section 
+          style={{ 
+            height: '85vh', 
+            background: 'linear-gradient(to bottom, #0f172a, #1e293b)',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 1rem'
+          }}
+        >
+          <div
+            style={{
+              maxWidth: '1200px',
+              margin: '0 auto',
+              width: '100%',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '2rem'
+            }}
+          >
+            {/* Left Column */}
+            <div
+              style={{
+                flex: '1',
+                minWidth: '300px',
+                color: 'white',
+                padding: '2rem'
               }}
             >
-              Engineering Sustainable Futures with Digital and Physical Solutions
-            </h1>
-            <p 
-              className="animate-fade-in" 
-              style={{ 
-                fontSize: '1.125rem', 
-                color: 'var(--text-muted, #333333)', 
-                marginTop: '1.5rem',
-                opacity: 0,
-                animationDelay: '0.7s',
-                animationFillMode: 'forwards',
-                transition: 'color 0.3s ease'
-              }}
-            >
-              Bridging web development, controlled environment agriculture, and IoT technologies to create smarter, greener, and more efficient systems.
-            </p>
-            <div 
-              className="animate-fade-in" 
-              style={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                gap: '1rem', 
-                marginTop: '2rem',
-                opacity: 0,
-                animationDelay: '0.9s',
-                animationFillMode: 'forwards'
-              }}
-            >
-              <a 
-                href="#projects" 
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: '#123524',
-                  color: '#f7f7f2',
-                  borderRadius: '0.375rem',
-                  transition: 'background-color 0.3s, color 0.3s',
-                  textDecoration: 'none',
+              <h1 
+                className="animate-fade-in" 
+                style={{ 
+                  fontSize: 'clamp(2.5rem, 5vw, 4rem)', 
+                  fontWeight: 600, 
+                  letterSpacing: '-0.025em',
+                  marginTop: '1rem',
+                  marginBottom: '1.5rem',
+                  opacity: 0,
+                  animationDelay: '0.5s',
+                  animationFillMode: 'forwards',
+                  color: 'white',
+                  lineHeight: '1.2'
                 }}
               >
-                View Portfolio
-              </a>
-              <a 
-                href="#about" 
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: 'transparent',
-                  color: 'var(--text-color, #123524)',
-                  border: '1px solid #123524',
-                  borderRadius: '0.375rem',
-                  transition: 'background-color 0.3s, color 0.3s, border-color 0.3s',
-                  textDecoration: 'none',
+                I build hardware-aware web apps & CEA tools.
+              </h1>
+              <p 
+                className="animate-fade-in" 
+                style={{ 
+                  fontSize: '1.25rem', 
+                  color: '#e2e8f0', 
+                  marginBottom: '2rem',
+                  opacity: 0,
+                  animationDelay: '0.7s',
+                  animationFillMode: 'forwards',
+                  lineHeight: '1.6'
                 }}
               >
-                Get in Touch
-              </a>
+                Bridging IoT sensors with delightful user interfaces.
+              </p>
+              <div 
+                className="animate-fade-in" 
+                style={{ 
+                  opacity: 0,
+                  animationDelay: '0.9s',
+                  animationFillMode: 'forwards'
+                }}
+              >
+                <button 
+                  onClick={scrollToContact} 
+                  style={{
+                    padding: '0.75rem 1.75rem',
+                    backgroundColor: '#10b981',
+                    color: 'white',
+                    borderRadius: '0.375rem',
+                    border: 'none',
+                    fontWeight: '500',
+                    fontSize: '1.125rem',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#059669'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
+                >
+                  Get in Touch
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column - Video */}
+            <div
+              style={{
+                flex: '1',
+                minWidth: '300px',
+                padding: '2rem',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              className="animate-fade-in"
+            >
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: '600px',
+                  height: 'auto',
+                  borderRadius: '0.5rem',
+                  overflow: 'hidden',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                  opacity: 0,
+                  animationDelay: '1.1s',
+                  animationFillMode: 'forwards'
+                }}
+              >
+                <video 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                >
+                  <source src={sporeLinkDemo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             </div>
           </div>
         </section>
         
         {/* Projects Grid */}
-        <section id="projects" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginBottom: '6rem' }}>
+        <section id="projects" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem', marginTop: '6rem', marginBottom: '6rem' }}>
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', 
@@ -270,6 +336,7 @@ const ParallaxHomePage = () => {
                   width: '100%',
                   maxWidth: '300px',
                 }}
+                id="contact"
               >
                 Email Us
               </a>
