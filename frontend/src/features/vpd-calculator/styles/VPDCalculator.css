@@ -461,11 +461,15 @@
 
 /* Dark mode specific overrides */
 .dark .vpd-chart-container canvas {
-  filter: invert(0.85) hue-rotate(180deg);
+  filter: none;
 }
 
 .dark .input-with-units input {
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--color-off-white);
   border-color: #444;
+}
+
+.dark .vpd-ranges-title {
+  color: var(--color-off-white);
 } 

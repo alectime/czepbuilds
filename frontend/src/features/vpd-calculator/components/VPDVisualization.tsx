@@ -32,6 +32,15 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
   const margin = { top: 30, right: 20, bottom: 20, left: 40 };
+  
+  // Define VPD range colors exactly matching the panel
+  const vpdColors = useMemo(() => ({
+    tooLow: '#785673',    // Too Low (Under-transpiration)
+    low: '#a3b03a',       // Low (Early Veg)
+    ideal: '#578735',     // Ideal (Late Veg/Early Flower)
+    high: '#f4bb4a',      // High (Mid/Late Flower)
+    tooHigh: '#4e8cd6'    // Too High (Over-transpiration)
+  }), []);
 
   // Convert Fahrenheit to Celsius
   const fahrenheitToCelsius = (f: number) => (f - 32) * (5 / 9);
@@ -211,17 +220,18 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
         const tempC = tempUnit === 'F' ? fahrenheitToCelsius(clampedTemp) : clampedTemp;
         const vpd = calculateVPD(tempC, clampedHumidity);
         
-        // Set color based on VPD value
-        let color = 'rgb(120, 86, 115)'; // Purple for under transpiration danger
-         
-        if (vpd >= 0.4 && vpd < 0.8) {
-          color = 'rgb(163, 176, 58)'; // Lime green for early veg
+        // Set color based on VPD value - using exact hex colors from VPD ranges panel
+        let color;
+        if (vpd < 0.4) {
+          color = vpdColors.tooLow; // Too Low (Under-transpiration)
+        } else if (vpd >= 0.4 && vpd < 0.8) {
+          color = vpdColors.low;    // Low (Early Veg)
         } else if (vpd >= 0.8 && vpd < 1.2) {
-          color = 'rgb(87, 135, 53)'; // Green for late veg/early flower
+          color = vpdColors.ideal;  // Ideal (Late Veg/Early Flower)
         } else if (vpd >= 1.2 && vpd < 1.6) {
-          color = 'rgb(244, 187, 74)'; // Orange/yellow for mid/late flower
-        } else if (vpd >= 1.6) {
-          color = 'rgb(78, 140, 214)'; // Blue for over transpiration danger
+          color = vpdColors.high;   // High (Mid/Late Flower)
+        } else {
+          color = vpdColors.tooHigh; // Too High (Over-transpiration)
         }
 
         // Draw pixel with exact size for 100x100 grid
@@ -286,7 +296,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.arc(currentPointX, currentPointY, 6, 0, 2 * Math.PI);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.fill();
-  }, [airTemp, humidity, tempUnit, dimensions]);
+  }, [airTemp, humidity, tempUnit, dimensions, vpdColors]);
 
   return (
     <div ref={containerRef} className="vpd-chart-container" style={{ width: '100%' }}>
