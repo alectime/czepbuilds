@@ -15,19 +15,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-background-dark);
-  color: var(--color-text-light);
+  background-color: var(--bg-color, #f7f7f2);
+  color: var(--text-color, #080806);
   line-height: 1.6;
   overflow-x: hidden;
   width: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--color-background);
-  color: var(--color-text);
+  background-color: var(--bg-color, #f7f7f2);
+  color: var(--text-color, #080806);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 main {
@@ -47,12 +49,14 @@ main {
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
   line-height: 1.2;
-  color: var(--color-text);
+  color: var(--text-color, #080806);
+  transition: color 0.3s ease;
 }
 
 p {
   margin-bottom: 1rem;
-  color: var(--color-text);
+  color: var(--text-muted, #333333);
+  transition: color 0.3s ease;
 }
 
 a {
@@ -187,6 +191,47 @@ img {
   background-color: transparent;
   border-color: var(--color-off-white);
   color: var(--color-off-white);
+}
+
+/* Loading spinner for iframe content */
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--color-primary);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Code styling for setup instructions */
+code {
+  background-color: rgba(0, 0, 0, 0.08);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', 'Andale Mono', monospace;
+  font-size: 0.9em;
+  color: var(--text-color);
+}
+
+.dark code {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 /* Responsive utility classes */

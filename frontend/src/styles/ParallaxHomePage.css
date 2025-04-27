@@ -1,0 +1,97 @@
+/* ParallaxHomePage.css */
+
+/* Animation keyframes */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation classes */
+.animate-fade-in {
+  animation: fade-in 0.8s forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s forwards;
+}
+
+/* Parallax container */
+.parallax-container {
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Project tile */
+.project-tile {
+  overflow: hidden;
+  border-radius: 0.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: #080806;
+  color: #f7f7f2;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.5s;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  perspective: 1000px;
+}
+
+.project-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, transparent, rgba(0, 0, 0, 0.05));
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.project-tile:hover::before {
+  opacity: 1;
+}
+
+.project-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 20;
+}
+
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f7f7f2;
+  transition: colors 0.3s;
+}
+
+/* Text styles */
+.text-muted-foreground {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Utility classes */
+.ease-out-expo {
+  transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+} 

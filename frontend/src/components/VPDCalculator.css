@@ -5,6 +5,8 @@
   align-items: center;
   margin: 0 auto;
   max-width: 1400px;
+  color: var(--text-color, #080806);
+  transition: color 0.3s ease;
 }
 
 .vpd-layout {
@@ -12,7 +14,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .calculator-section {
@@ -28,7 +30,7 @@
   align-items: center;
   width: 100%;
   max-width: 1000px;
-  margin: 0 auto 1rem auto;
+  margin: 0 auto 0.5rem auto;
   padding: 0;
   background-color: transparent;
   border-radius: 0;
@@ -93,18 +95,20 @@
 }
 
 .vpd-result {
-  background-color: #fff;
+  background-color: var(--bg-color-secondary, rgba(18, 53, 36, 0.1));
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
   text-align: center;
+  color: var(--text-color, #080806);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   margin-bottom: 1rem;
 }
 
 .vpd-result h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.3rem;
-  color: #333;
+  color: var(--text-color, #080806);
 }
 
 .vpd-status {
@@ -120,19 +124,18 @@
 }
 
 .vpd-ranges-panel {
-  background-color: #fff;
-  padding: 1rem;
+  background-color: var(--bg-color-secondary, rgba(18, 53, 36, 0.1));
+  padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.vpd-ranges-title {
-  font-weight: bold;
+.vpd-ranges-panel h3 {
+  margin-top: 0;
   margin-bottom: 1rem;
-  font-size: 1.1rem;
-  color: #333;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
+  color: var(--text-color, #080806);
+  transition: color 0.3s ease;
 }
 
 .vpd-range-item {
@@ -201,10 +204,18 @@
 
 .input-with-units input {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color, #e0e0e0);
   border-radius: 4px;
-  font-size: 16px;
+  background-color: var(--bg-color, #f7f7f2);
+  color: var(--text-color, #080806);
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.input-with-units span {
+  padding: 0.5rem;
+  color: var(--text-muted, #333333);
+  transition: color 0.3s ease;
 }
 
 .unit-selector {
@@ -271,7 +282,7 @@
     margin-bottom: 1rem;
   }
   
-  .controls-and-ranges {
+ .controls-and-ranges {
     width: 100%;
     max-width: 800px;
   }
@@ -333,13 +344,21 @@
 
 /* Compact controls tile for combined display and inputs */
 .compact-controls-tile {
-  background-color: #fff;
+  background-color: var(--bg-color-secondary, rgba(18, 53, 36, 0.1));
+  padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  box-shadow: var(--box-shadow, 0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.compact-controls-tile h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-color, #080806);
+  transition: color 0.3s ease;
 }
 
 /* VPD value display */
@@ -397,9 +416,11 @@
 }
 
 .compact-control label {
-  min-width: 140px;
-  font-size: 0.95rem;
-  color: #333;
+  font-weight: 500;
+  margin-right: 1rem;
+  min-width: 120px;
+  color: var(--text-color, #080806);
+  transition: color 0.3s ease;
 }
 
 /* VPD status colors */
@@ -416,4 +437,21 @@
 .vpd-value.healthy {
   background-color: #e3f2fd;
   color: #1565c0;
+}
+
+.vpd-chart {
+  width: 100%; 
+  height: auto;
+  background-color: transparent;
+}
+
+/* Dark mode specific overrides */
+.dark .vpd-chart-container canvas {
+  filter: invert(0.85) hue-rotate(180deg);
+}
+
+.dark .input-with-units input {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-off-white);
+  border-color: #444;
 } 

@@ -34,7 +34,9 @@ const VPDCalculatorPage: React.FC = () => {
               padding: 0
             }}
           >
-            <VPDCalculator />
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem 0' }}>
+              <VPDCalculator />
+            </div>
           </section>
         </div>
       </div>

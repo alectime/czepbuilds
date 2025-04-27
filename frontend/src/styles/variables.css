@@ -7,7 +7,7 @@
   --color-orange: #fd801d;
   --color-light-gray: #E6E6E6;
 
-  /* Functional Colors */
+  /* Functional Colors - Light Mode Default */
   --color-background: var(--color-light-gray);
   --color-background-dark: var(--color-black);
   --color-text: var(--color-black);
@@ -16,8 +16,25 @@
   --color-secondary: var(--color-beige);
   --color-accent: var(--color-orange);
   
+  /* Theme Variables - Light Mode Default */
+  --bg-color: var(--color-off-white);
+  --bg-color-secondary: rgba(18, 53, 36, 0.1);
+  --text-color: var(--color-black);
+  --text-muted: #333333;
+  --border-color: #e0e0e0;
+  
   /* Other Variables */
   --border-radius: 8px;
   --box-shadow: 0 4px 6px rgba(8, 8, 6, 0.1);
   --transition-speed: 0.3s;
+} 
+
+/* Dark Mode Variables */
+.dark {
+  --bg-color: #121212;
+  --bg-color-secondary: rgba(255, 255, 255, 0.05);
+  --text-color: var(--color-off-white);
+  --text-muted: #b0b0b0;
+  --border-color: #333333;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 } 
