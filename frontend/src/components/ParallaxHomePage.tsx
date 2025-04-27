@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import '../styles/ParallaxHomePage.css';
+import { Link } from 'react-router-dom';
 
 // Import the ParallaxTile component
 import ParallaxTile from '../parallax-design/ParallaxTile';
@@ -124,8 +125,8 @@ const ParallaxHomePage = () => {
                 animationFillMode: 'forwards'
               }}
             >
-              <a 
-                href="#projects" 
+              <Link 
+                to="/projects" 
                 style={{
                   padding: '0.75rem 1.5rem',
                   backgroundColor: '#123524',
@@ -136,7 +137,7 @@ const ParallaxHomePage = () => {
                 }}
               >
                 View Portfolio
-              </a>
+              </Link>
               <a 
                 href="#about" 
                 style={{
