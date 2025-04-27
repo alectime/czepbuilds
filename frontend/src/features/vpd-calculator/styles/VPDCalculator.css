@@ -14,7 +14,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 0.5rem;
+  gap: 1.5rem;
 }
 
 .calculator-section {
@@ -30,11 +30,20 @@
   align-items: center;
   width: 100%;
   max-width: 1000px;
+  min-height: 500px; /* Ensure minimum height on initial load */
   margin: 0 auto 0.5rem auto;
   padding: 0;
   background-color: transparent;
   border-radius: 0;
   box-shadow: none;
+}
+
+.vpd-chart-container {
+  width: 100%;
+  min-height: 600px; /* Ensure sufficient space for the chart */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Controls section */
@@ -43,7 +52,7 @@
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  max-width: 1000px;
+  max-width: 800px; /* Match the chart's typical size */
   margin: 0 auto;
 }
 
@@ -61,6 +70,11 @@
     width: 100%;
     margin: 0 auto;
     border-radius: 0;
+    min-height: auto;
+  }
+  
+  .vpd-chart-container {
+    min-height: auto;
   }
   
   .controls-and-ranges {

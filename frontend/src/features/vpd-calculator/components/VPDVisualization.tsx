@@ -30,7 +30,7 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
+  const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
   const margin = { top: 30, right: 20, bottom: 20, left: 40 };
 
   // Convert Fahrenheit to Celsius
@@ -86,52 +86,67 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     const clampedTemp = Math.max(tempRange.min, Math.min(tempRange.max, clickTemp));
     const clampedHumidity = Math.max(0, Math.min(100, clickHumidity));
     
-    // Debug logging
-    console.log('Click coordinates:', { x, y });
-    console.log('Chart dimensions:', { chartWidth, chartHeight });
-    console.log('Relative position:', { x: relativeX, y: relativeY });
-    console.log('Final values:', {
-      humidity: clampedHumidity,
-      temperature: clampedTemp
-    });
-    
     onChartClick(clampedTemp, clampedHumidity);
   };
   
-  // Update dimensions when window resizes
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.clientWidth;
-        const isMobile = window.innerWidth <= 768;
-        
-        // Make the chart responsive while maintaining square shape
-        let size;
-        
-        if (isMobile) {
-          // On mobile, use the full container width
-          size = containerWidth;
-        } else {
-          // On desktop, maintain the capped size
-          size = Math.min(Math.max(containerWidth, 400), 1000); // Min 400px, max 1000px
-        }
-        
-        // For a square chart, width and height are equal
+  // Initial sizing function
+  const calculateInitialSize = () => {
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.clientWidth;
+      const isMobile = window.innerWidth <= 768;
+      
+      let size;
+      
+      if (isMobile) {
+        // On mobile, use the full container width
+        size = containerWidth;
+      } else {
+        // On desktop, use a more appropriate size that matches the controls
+        size = Math.min(Math.max(containerWidth, 600), 1000); // Minimum size of 600px
+      }
+      
+      // Set dimensions if they've changed
+      if (size !== dimensions.width) {
         setDimensions({ width: size, height: size });
       }
-    };
-
-    updateDimensions();
+    }
+  };
+  
+  // Force layout recalculation
+  useEffect(() => {
+    // Initial size calculation
+    calculateInitialSize();
     
-    // Add a small delay to ensure container dimensions are correct after layout changes
-    const resizeTimer = setTimeout(updateDimensions, 100);
+    // Set a short delay to ensure the container is fully rendered
+    const initialTimer = setTimeout(() => {
+      calculateInitialSize();
+    }, 50);
     
-    // Add resize event listener
-    window.addEventListener('resize', updateDimensions);
+    // Set up mutation observer for parent element size changes
+    const resizeObserver = new ResizeObserver(() => {
+      calculateInitialSize();
+    });
+    
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+      
+      // Also observe parent elements for size changes
+      if (containerRef.current.parentElement) {
+        resizeObserver.observe(containerRef.current.parentElement);
+      }
+    }
+    
+    // Update dimensions when window resizes
+    window.addEventListener('resize', calculateInitialSize);
+    
+    // For Safety, call one more time after a longer delay
+    const backupTimer = setTimeout(calculateInitialSize, 500);
     
     return () => {
-      window.removeEventListener('resize', updateDimensions);
-      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', calculateInitialSize);
+      resizeObserver.disconnect();
+      clearTimeout(initialTimer);
+      clearTimeout(backupTimer);
     };
   }, []);
 
@@ -249,59 +264,42 @@ const VPDVisualization: React.FC<VPDVisualizationProps> = ({
     ctx.font = titleFontSize;
     ctx.fillText(`Air Temperature (°${tempUnit})`, 0, 0);
     ctx.restore();
-
-    // X-axis title (Humidity) - positioned inside the chart
+    
+    // X-axis title (Humidity)
     ctx.textAlign = 'center';
     ctx.font = titleFontSize;
-    ctx.fillText('Relative Humidity (%)', margin.left + chartWidth / 2, margin.top + 35);
-
-    // Draw current point
-    // Flipped X-axis (humidity): 100% on left, 0% on right
-    const currentX = margin.left + ((100 - humidity) / 100) * chartWidth;
-    // Flipped Y-axis (temperature): Low temp at top, high temp at bottom
-    const currentY = margin.top + ((airTemp - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
-
-    // Draw point shadow
+    ctx.fillText(`Relative Humidity (%)`, margin.left + chartWidth / 2, margin.top - 10);
+    
+    // Draw the current point
+    const currentPointX = margin.left + ((100 - humidity) / 100) * chartWidth;
+    const currentPointY = margin.top + ((airTemp - tempRange.min) / (tempRange.max - tempRange.min)) * chartHeight;
+    
+    // Draw outline circle
     ctx.beginPath();
-    ctx.arc(currentX, currentY, 8, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-    ctx.fill();
-
-    // Draw point
-    ctx.beginPath();
-    ctx.arc(currentX, currentY, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#000000';
-    ctx.fill();
-    ctx.strokeStyle = '#ffffff';
+    ctx.arc(currentPointX, currentPointY, 8, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'white';
     ctx.lineWidth = 2;
     ctx.stroke();
-
-    // Add cursor style to indicate clickable area
-    canvas.style.cursor = onChartClick ? 'pointer' : 'default';
-
-  }, [
-    airTemp, 
-    humidity, 
-    tempUnit, 
-    dimensions, 
-    onChartClick, 
-    margin.top,
-    margin.right,
-    margin.bottom,
-    margin.left,
-    tempRangeF,
-    tempRangeC
-  ]);
+    
+    // Draw filled circle
+    ctx.beginPath();
+    ctx.arc(currentPointX, currentPointY, 6, 0, 2 * Math.PI);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.fill();
+  }, [airTemp, humidity, tempUnit, dimensions]);
 
   return (
-    <div ref={containerRef} className="vpd-chart">
-      <canvas 
+    <div ref={containerRef} className="vpd-chart-container" style={{ width: '100%' }}>
+      <canvas
         ref={canvasRef}
         onClick={handleCanvasClick}
-        style={{
+        className="vpd-chart"
+        style={{ 
+          width: '100%', 
+          height: 'auto',
           display: 'block',
-          width: '100%',
-          height: '100%'
+          margin: '0 auto',
+          cursor: 'crosshair'
         }}
       />
     </div>
